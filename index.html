@@ -160,73 +160,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-我的第一篇博客文章" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/30/我的第一篇博客文章/">我的第一篇博客文章</a>
-    </h1>
-  
-
-        
-        <a href="/2019/06/30/我的第一篇博客文章/" class="archive-article-date">
-  	<time datetime="2019-06-29T23:37:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h2><p>内容</p>
-<hr>
-<h2 id="第二章"><a href="#第二章" class="headerlink" title="第二章"></a>第二章</h2><p>内容</p>
-<hr>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><hr>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/06/30/我的第一篇博客文章/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -273,6 +206,79 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/06/30/hello-world/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-C语言中有符号数和无符号数的问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="C语言中有符号数和无符号数的问题"><a href="#C语言中有符号数和无符号数的问题" class="headerlink" title="C语言中有符号数和无符号数的问题"></a>C语言中有符号数和无符号数的问题</h2><ol>
+<li><h5 id="请分析这段程序，当参数length等于0时，-运行这段代码应该返回的值是多少？"><a href="#请分析这段程序，当参数length等于0时，-运行这段代码应该返回的值是多少？" class="headerlink" title="请分析这段程序，当参数length等于0时， 运行这段代码应该返回的值是多少？"></a>请分析这段程序，当参数length等于0时， 运行这段代码应该返回的值是多少？</h5><p>length等于0时，由于i&lt;=length-1不成立所以for循环内的语句不会执行，故应该返回的result值为0.</p>
+</li>
+<li><h5 id="运行这段代码，当参数length等于0时，实际会产生什么结果？"><a href="#运行这段代码，当参数length等于0时，实际会产生什么结果？" class="headerlink" title="运行这段代码，当参数length等于0时，实际会产生什么结果？"></a>运行这段代码，当参数length等于0时，实际会产生什么结果？</h5><p>在上机运行时，不同的编译器有不同的结果：</p>
+<ul>
+<li>Microsoft Visual Studio 2017：首先会报出警告：”<code>C4018       “&lt;=”: 有符号/无符号不匹配</code>”，然后运行时会发生异常：”<code>0x00DE176F 处引发的异常: 0xC0000005: 读取位置 0x00D00000 时发生访问冲突。</code>”</li>
+<li>Visual C++ 6.0：报出警告：<code>&lt;=:int/unsigned mismatch</code>，然后无输出结果。</li>
+<li>菜鸟教程C语言在线编译器：<code>signal: segmentation fault (core dumped)</code>。</li>
+</ul>
+</li>
+<li><h5 id="请解释你的实际运行的结果产生的原因。"><a href="#请解释你的实际运行的结果产生的原因。" class="headerlink" title="请解释你的实际运行的结果产生的原因。"></a>请解释你的实际运行的结果产生的原因。</h5><p>​    查找资料得知，当执行一个运算时（如<code>a&gt;b</code>），如果它的一个运算数是有符号的而另一个数是无符号的，那么C语言会隐式地将有符号类型参数强制转换为无符号数，并假设这两个数都是非负的，来执行这个运算。这种方法对于标准的算术运算来说并无多大差异，但是对于像&lt;和&gt;这样的运算就可能产生非直观的结果。</p>
+<p>​    <code>length-1</code>中因为<code>length</code>是<code>unsigned</code>类型，所以所有的运算都被隐式地被强制转换为<code>unsigned</code>类型，故<code>length-1</code>（即0-1 = -1），整数在计算机中通常是以补码的形式存在的，而-1的补码（这里以用4个字节储存为例）为<code>1111 1111 1111 1111</code>。对大多数C语言的实现，处理同样字长的有符号数和无符号数之间的相互转换的一般规则是：数值可能会改变，但是位模式不变。也就是说，将<code>unsigned int</code>强制类型转换成<code>int</code>，或将<code>int</code>转换成<code>unsigned int</code>底层的位表示保持不变。也就是说，即使是-1转换成<code>unsigned int</code>之后，它在内存中的表示还是没有改变，即<code>1111 1111 1111 1111</code>。而<code>1111 1111 1111 1111</code>对于有符号数而言它表示-1，但对于无符号数而言，它表示UMax（即无符号数能表示的最大值）。</p>
+<p>​    现在回到题目上，由于<code>length-1</code>对应的无符号类型的值为Umax，而i转换为无符号类型的值大小仍为i，故此时for循环会执行UMax次，遍历数组时便会越界发生错误。这点从vs2017的运行时发出的访问异常和在线编译器报出的<code>signal: segmentation fault (core dumped)（段错误(核心转储)）</code>错误可以看出。造成段故障，产生核心转储的可能原因之一便是由于使用错误的下标，导致数组访问越界。而数组访问越界正是本题错误的产生原因。</p>
+</li>
+<li><h5 id="修改代码以得出正确的结果。"><a href="#修改代码以得出正确的结果。" class="headerlink" title="修改代码以得出正确的结果。"></a>修改代码以得出正确的结果。</h5><p>这里只列出三种改法：</p>
+<ol>
+<li><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">sum_elements</span><span class="params">(<span class="keyword">float</span> a[], <span class="keyword">unsigned</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">float</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;length;i++)</span><br><span class="line">         result +=a[i];</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">sum_elements</span><span class="params">(<span class="keyword">float</span> a[], <span class="keyword">unsigned</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">float</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (i=<span class="number">1</span>;i&lt;=length;i++)</span><br><span class="line">         result +=a[i];</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">sum_elements</span><span class="params">(<span class="keyword">float</span> a[], <span class="keyword">unsigned</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">float</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;=(<span class="keyword">int</span>)length<span class="number">-1</span>;i++)</span><br><span class="line">         result +=a[i];</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/07/C语言中有符号数和无符号数的问题/">展开全文 >></a>
         </p>
       
 
