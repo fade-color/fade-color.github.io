@@ -9,7 +9,7 @@
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#000">
 <title>机器学习笔记01. K-近邻算法简介 | 七年的万事屋</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1618662922740">
+<link rel="shortcut icon" href="/favicon.ico?v=1618663047337">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -215,7 +215,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">5</span>
+        <span class="site-item-stat-count">6</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -3154,6 +3154,92 @@ a[(a &amp;lt; 5) | (a % 2 == 0)]
 &lt;/li&gt;
 &lt;/ul&gt;
 ">Numpy基本操作</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://fade-color.github.io/post/python-de-jie-bao/"" data-c="
+          &lt;h4 id=&#34;元组解包&#34;&gt;元组解包&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;a, b, c = (1, 2, 3)
+# a:1 b:2 c:3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;字符串解包&#34;&gt;字符串解包&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;a, b, c = &amp;quot;xyz&amp;quot;
+# a:x b:y c:z
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;字典解包&#34;&gt;字典解包&lt;/h4&gt;
+&lt;p&gt;字典解包后，只会把字典的key取出来，value则丢掉了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;a, b, c = {&amp;quot;a&amp;quot;:1, &amp;quot;b&amp;quot;:2, &amp;quot;c&amp;quot;:3}
+# a:&#39;a&#39; b:&#39;b&#39; c:&#39;c&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;等号左右元素不等时的解包&#34;&gt;等号左右元素不等时的解包&lt;/h4&gt;
+&lt;p&gt;在 Python2 中，如果等号左边变量的个数不等于右边可迭代对象中元素的个数，是不允许解包的。但在 &lt;strong&gt;Python3&lt;/strong&gt; 可以这么做了。这个特性可以在 PEP 3132 中看到。&lt;/p&gt;
+&lt;p&gt;这种语法就是在某个变量面前加一个星号，而且这个星号可以放在任意变量，每个变量都分配一个元素后，剩下的元素都分配给这个带星号的变量。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;a, b, *c = [1, 2, 3, 4]
+# a:1 b:2 c:[3, 4]
+
+# *号可以在任意位置
+a, *b, c = [1, 2, 3, 4]
+# a:1 b:[2, 3] c:4
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;函数调用时的解包&#34;&gt;函数调用时的解包&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;元组，列表，字符串等传入函数时的解包：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def func(a, b, c):
+    print(a, b, c)
+
+func(*[1, 2, 3])
+func(*(1, 2, 3))
+func(*&amp;quot;123&amp;quot;)
+# 以上三条语句都等同于
+func(1, 2, 3)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;字典会以key=value的格式解包传入函数：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;func(**{&amp;quot;a&amp;quot;: 1, &amp;quot;b&amp;quot;: 2, &amp;quot;c&amp;quot;: 3})
+# 等同于
+func(a=1, b=2, c=3)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;字典的key必须和形参名保持一致，否则会报错&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;从&lt;strong&gt;Python3.5&lt;/strong&gt;开始，在函数调用中可以有任意多个解包操作：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;func(*(1,), *[2], **{&amp;quot;c&amp;quot;: 3})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;表达式中的解包&#34;&gt;表达式中的解包&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;*range(4), 4
+# (0, 1, 2, 3, 4)
+
+[*range(4), 4]
+# [0, 1, 2, 3, 4]
+
+{*range(4), 4}
+# {0, 1, 2, 3, 4}
+
+{&amp;quot;x&amp;quot;: 1, &amp;quot;y&amp;quot;: 2, **{&amp;quot;z&amp;quot;: 3}}
+# {&#39;x&#39;: 1, &#39;y&#39;: 2, &#39;z&#39;: 3}
+
+[*[1, 2, 3], *range(4, 8)]
+# [1, 2, 3, 4, 5, 6, 7]
+
+a = {&amp;quot;x&amp;quot;: 1, &amp;quot;y&amp;quot;: 2}
+b = {&amp;quot;z&amp;quot;: 3}
+{**a, **b}
+# {&#39;x&#39;: 1, &#39;y&#39;: 2, &#39;z&#39;: 3}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;总结&#34;&gt;总结&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;自动解包支持一切可迭代对象。&lt;/li&gt;
+&lt;li&gt;python3中，支持更高级的解包操作，用星号操作使得等号左边的变量个数可以少于右边迭代对象中元素的个数。&lt;/li&gt;
+&lt;li&gt;函数调用时，可以用 &lt;code&gt;*&lt;/code&gt; 或者&lt;code&gt;**&lt;/code&gt;解包可迭代对象，作为参数传递。&lt;/li&gt;
+&lt;li&gt;python3.5，函数调用和表达式中可支持更多的解包操作。&lt;/li&gt;
+&lt;/ol&gt;
+">Python的解包</a>
       </div>
       
       <div class="item">

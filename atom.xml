@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://fade-color.github.io</id>
     <title>七年的万事屋</title>
-    <updated>2021-04-17T12:35:30.523Z</updated>
+    <updated>2021-04-17T12:37:41.193Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://fade-color.github.io"/>
     <link rel="self" href="https://fade-color.github.io/atom.xml"/>
@@ -1201,6 +1201,95 @@ a[(a &lt; 5) | (a % 2 == 0)]
 </code></pre>
 </li>
 </ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python的解包]]></title>
+        <id>https://fade-color.github.io/post/python-de-jie-bao/</id>
+        <link href="https://fade-color.github.io/post/python-de-jie-bao/">
+        </link>
+        <updated>2021-03-11T12:36:46.000Z</updated>
+        <content type="html"><![CDATA[<h4 id="元组解包">元组解包</h4>
+<pre><code class="language-python">a, b, c = (1, 2, 3)
+# a:1 b:2 c:3
+</code></pre>
+<h4 id="字符串解包">字符串解包</h4>
+<pre><code class="language-python">a, b, c = &quot;xyz&quot;
+# a:x b:y c:z
+</code></pre>
+<h4 id="字典解包">字典解包</h4>
+<p>字典解包后，只会把字典的key取出来，value则丢掉了。</p>
+<pre><code class="language-python">a, b, c = {&quot;a&quot;:1, &quot;b&quot;:2, &quot;c&quot;:3}
+# a:'a' b:'b' c:'c'
+</code></pre>
+<h4 id="等号左右元素不等时的解包">等号左右元素不等时的解包</h4>
+<p>在 Python2 中，如果等号左边变量的个数不等于右边可迭代对象中元素的个数，是不允许解包的。但在 <strong>Python3</strong> 可以这么做了。这个特性可以在 PEP 3132 中看到。</p>
+<p>这种语法就是在某个变量面前加一个星号，而且这个星号可以放在任意变量，每个变量都分配一个元素后，剩下的元素都分配给这个带星号的变量。</p>
+<pre><code class="language-python">a, b, *c = [1, 2, 3, 4]
+# a:1 b:2 c:[3, 4]
+
+# *号可以在任意位置
+a, *b, c = [1, 2, 3, 4]
+# a:1 b:[2, 3] c:4
+</code></pre>
+<h4 id="函数调用时的解包">函数调用时的解包</h4>
+<ul>
+<li>
+<p>元组，列表，字符串等传入函数时的解包：</p>
+<pre><code class="language-python">def func(a, b, c):
+    print(a, b, c)
+
+func(*[1, 2, 3])
+func(*(1, 2, 3))
+func(*&quot;123&quot;)
+# 以上三条语句都等同于
+func(1, 2, 3)
+</code></pre>
+</li>
+<li>
+<p>字典会以key=value的格式解包传入函数：</p>
+<pre><code class="language-python">func(**{&quot;a&quot;: 1, &quot;b&quot;: 2, &quot;c&quot;: 3})
+# 等同于
+func(a=1, b=2, c=3)
+</code></pre>
+<blockquote>
+<p>字典的key必须和形参名保持一致，否则会报错</p>
+</blockquote>
+</li>
+<li>
+<p>从<strong>Python3.5</strong>开始，在函数调用中可以有任意多个解包操作：</p>
+<pre><code class="language-python">func(*(1,), *[2], **{&quot;c&quot;: 3})
+</code></pre>
+</li>
+</ul>
+<h4 id="表达式中的解包">表达式中的解包</h4>
+<pre><code class="language-python">*range(4), 4
+# (0, 1, 2, 3, 4)
+
+[*range(4), 4]
+# [0, 1, 2, 3, 4]
+
+{*range(4), 4}
+# {0, 1, 2, 3, 4}
+
+{&quot;x&quot;: 1, &quot;y&quot;: 2, **{&quot;z&quot;: 3}}
+# {'x': 1, 'y': 2, 'z': 3}
+
+[*[1, 2, 3], *range(4, 8)]
+# [1, 2, 3, 4, 5, 6, 7]
+
+a = {&quot;x&quot;: 1, &quot;y&quot;: 2}
+b = {&quot;z&quot;: 3}
+{**a, **b}
+# {'x': 1, 'y': 2, 'z': 3}
+</code></pre>
+<h4 id="总结">总结</h4>
+<ol>
+<li>自动解包支持一切可迭代对象。</li>
+<li>python3中，支持更高级的解包操作，用星号操作使得等号左边的变量个数可以少于右边迭代对象中元素的个数。</li>
+<li>函数调用时，可以用 <code>*</code> 或者<code>**</code>解包可迭代对象，作为参数传递。</li>
+<li>python3.5，函数调用和表达式中可支持更多的解包操作。</li>
+</ol>
 ]]></content>
     </entry>
     <entry>

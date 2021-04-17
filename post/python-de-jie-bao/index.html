@@ -8,7 +8,7 @@
 <meta name="keywords" content="Gridea静态个人博客">
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#000">
-<title>JupyterLab 显示中文字体 | 七年的万事屋</title>
+<title>Python的解包 | 七年的万事屋</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1618663047337">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -38,8 +38,8 @@
 
 
 
-  <meta name="description" content="JupyterLab 显示中文字体" />
-  <meta name="keywords" content="matplotlib,Python" />
+  <meta name="description" content="Python的解包" />
+  <meta name="keywords" content="学习笔记,Python" />
 </head>
 
 <body>
@@ -268,10 +268,17 @@
 <ul>
 <li>
 <ul>
-<li><a href="#%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E7%B3%BB%E7%BB%9Fjupyterlab%E6%94%AF%E6%8C%81%E7%9A%84%E6%89%80%E6%9C%89%E5%AD%97%E4%BD%93">查看当前系统JupyterLab支持的所有字体</a></li>
-<li><a href="#%E5%88%A0%E9%99%A4%E7%BC%93%E5%AD%98%E6%96%87%E4%BB%B6">删除缓存文件</a></li>
-<li><a href="#%E4%BF%AE%E6%94%B9matplotlibrc%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">修改matplotlibrc配置文件</a></li>
-<li><a href="#%E9%87%8D%E5%90%AFjupyterlab%E5%86%85%E6%A0%B8">重启JupyterLab内核</a></li>
+<li>
+<ul>
+<li><a href="#%E5%85%83%E7%BB%84%E8%A7%A3%E5%8C%85">元组解包</a></li>
+<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E5%8C%85">字符串解包</a></li>
+<li><a href="#%E5%AD%97%E5%85%B8%E8%A7%A3%E5%8C%85">字典解包</a></li>
+<li><a href="#%E7%AD%89%E5%8F%B7%E5%B7%A6%E5%8F%B3%E5%85%83%E7%B4%A0%E4%B8%8D%E7%AD%89%E6%97%B6%E7%9A%84%E8%A7%A3%E5%8C%85">等号左右元素不等时的解包</a></li>
+<li><a href="#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%97%B6%E7%9A%84%E8%A7%A3%E5%8C%85">函数调用时的解包</a></li>
+<li><a href="#%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%B8%AD%E7%9A%84%E8%A7%A3%E5%8C%85">表达式中的解包</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -541,8 +548,8 @@
           <div class="section bg-color post post-page">
             <section class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://fade-color.github.io/post/Jupyterlab-xian-shi-zhong-wen-zi-ti/">
-      JupyterLab 显示中文字体
+    <a class="post-title-link" href="https://fade-color.github.io/post/python-de-jie-bao/">
+      Python的解包
     </a>
   </h1>
   <div class="post-meta">
@@ -550,7 +557,7 @@
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2021-04-03 17:28:28">2021-04-03</span>
+      <span class="publish-time" data-t="2021-03-11 20:36:46">2021-03-11</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
@@ -559,8 +566,8 @@
       <span class="pc-show language" data-lan="category-in">分类于</span>
       
       
-      <a href="https://fade-color.github.io/tag/JV27a86be/">
-        <span>matplotlib</span>
+      <a href="https://fade-color.github.io/tag/kvztIB3-U/">
+        <span>学习笔记</span>
       </a>、
       
       
@@ -575,66 +582,98 @@
     
     <span class="meta-item">
       <i class="fa fa-clock-o"></i>
-      <span>2<span class="language" data-lan="minute">分钟</span></span>
+      <span>3<span class="language" data-lan="minute">分钟</span></span>
     </span>
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>300<span class="pc-show language" data-lan="words">字数</span></span>
+      <span>577<span class="pc-show language" data-lan="words">字数</span></span>
     </span>
     
   </div>
 </section>
             <div class="post-body next-md-body" id="post_body">
-              <h3 id="查看当前系统jupyterlab支持的所有字体">查看当前系统JupyterLab支持的所有字体</h3>
-<pre><code class="language-python">from matplotlib.font_manager import FontManager
+              <h4 id="元组解包">元组解包</h4>
+<pre><code class="language-python">a, b, c = (1, 2, 3)
+# a:1 b:2 c:3
+</code></pre>
+<h4 id="字符串解包">字符串解包</h4>
+<pre><code class="language-python">a, b, c = &quot;xyz&quot;
+# a:x b:y c:z
+</code></pre>
+<h4 id="字典解包">字典解包</h4>
+<p>字典解包后，只会把字典的key取出来，value则丢掉了。</p>
+<pre><code class="language-python">a, b, c = {&quot;a&quot;:1, &quot;b&quot;:2, &quot;c&quot;:3}
+# a:'a' b:'b' c:'c'
+</code></pre>
+<h4 id="等号左右元素不等时的解包">等号左右元素不等时的解包</h4>
+<p>在 Python2 中，如果等号左边变量的个数不等于右边可迭代对象中元素的个数，是不允许解包的。但在 <strong>Python3</strong> 可以这么做了。这个特性可以在 PEP 3132 中看到。</p>
+<p>这种语法就是在某个变量面前加一个星号，而且这个星号可以放在任意变量，每个变量都分配一个元素后，剩下的元素都分配给这个带星号的变量。</p>
+<pre><code class="language-python">a, b, *c = [1, 2, 3, 4]
+# a:1 b:2 c:[3, 4]
 
-mpl_fonts = set(f.name for f in FontManager().ttflist)
+# *号可以在任意位置
+a, *b, c = [1, 2, 3, 4]
+# a:1 b:[2, 3] c:4
+</code></pre>
+<h4 id="函数调用时的解包">函数调用时的解包</h4>
+<ul>
+<li>
+<p>元组，列表，字符串等传入函数时的解包：</p>
+<pre><code class="language-python">def func(a, b, c):
+    print(a, b, c)
 
-print('all font list get from matplotlib.font_manager:')
-for f in sorted(mpl_fonts):
-    print('\t' + f)
-</code></pre>
-<p>打印结果如下：</p>
-<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2021/04/17/y85rFj3HD6aTdsL.png" alt="image-20210417092307128" loading="lazy"></figure>
-<p>选择一款中文字体即可，这里我选择的是苹果的冬青黑体：&quot;Hiragino Sans GB&quot;，windows用户可以选择黑体（SimHei）</p>
-<h3 id="删除缓存文件">删除缓存文件</h3>
-<p>Mac：</p>
-<ul>
-<li>
-<pre><code class="language-bash">cd ~/.matplotlib
-rm -r *
+func(*[1, 2, 3])
+func(*(1, 2, 3))
+func(*&quot;123&quot;)
+# 以上三条语句都等同于
+func(1, 2, 3)
 </code></pre>
 </li>
-</ul>
-<p>Windows：</p>
-<ul>
 <li>
-<p>进入到自己的用户目录文件夹下，在资源管理器的“查看”选项卡中勾选“显示隐藏文件及目录”即可看到<code>.matplotlib</code>文件夹，或者直接在资源管理器的路径栏中在路径后面手动输入<code>.matplotlib</code>后回车即可进入该文件夹</p>
-</li>
-<li>
-<p>然后把该文件夹内的资源删除即可。</p>
-</li>
-</ul>
-<h3 id="修改matplotlibrc配置文件">修改matplotlibrc配置文件</h3>
-<p>Mac：</p>
-<ul>
-<li>
-<p>输入<code>vim ~/.matplotlib/matplotlibrc</code>：</p>
-<p>然后将文件内容修改为：</p>
-<pre><code>font.family         : sans-serif
-font.sans-serif         : Hiragino Sans GB
-axes.unicode_minus  : False
+<p>字典会以key=value的格式解包传入函数：</p>
+<pre><code class="language-python">func(**{&quot;a&quot;: 1, &quot;b&quot;: 2, &quot;c&quot;: 3})
+# 等同于
+func(a=1, b=2, c=3)
 </code></pre>
-<p><code>font.sans-serif</code>后面改为自己选择的字体即可。</p>
+<blockquote>
+<p>字典的key必须和形参名保持一致，否则会报错</p>
+</blockquote>
+</li>
+<li>
+<p>从<strong>Python3.5</strong>开始，在函数调用中可以有任意多个解包操作：</p>
+<pre><code class="language-python">func(*(1,), *[2], **{&quot;c&quot;: 3})
+</code></pre>
 </li>
 </ul>
-<p>Win：</p>
-<ul>
-<li>在<code>.matplotlib</code>文件夹中新建matplotlibrc文件，把上面内容粘贴进去后<code>.txt</code>后缀名删掉即可。</li>
-</ul>
-<h3 id="重启jupyterlab内核">重启JupyterLab内核</h3>
-<p>接下来重启一下JupyterLab内核即可看到效果。</p>
+<h4 id="表达式中的解包">表达式中的解包</h4>
+<pre><code class="language-python">*range(4), 4
+# (0, 1, 2, 3, 4)
+
+[*range(4), 4]
+# [0, 1, 2, 3, 4]
+
+{*range(4), 4}
+# {0, 1, 2, 3, 4}
+
+{&quot;x&quot;: 1, &quot;y&quot;: 2, **{&quot;z&quot;: 3}}
+# {'x': 1, 'y': 2, 'z': 3}
+
+[*[1, 2, 3], *range(4, 8)]
+# [1, 2, 3, 4, 5, 6, 7]
+
+a = {&quot;x&quot;: 1, &quot;y&quot;: 2}
+b = {&quot;z&quot;: 3}
+{**a, **b}
+# {'x': 1, 'y': 2, 'z': 3}
+</code></pre>
+<h4 id="总结">总结</h4>
+<ol>
+<li>自动解包支持一切可迭代对象。</li>
+<li>python3中，支持更高级的解包操作，用星号操作使得等号左边的变量个数可以少于右边迭代对象中元素的个数。</li>
+<li>函数调用时，可以用 <code>*</code> 或者<code>**</code>解包可迭代对象，作为参数传递。</li>
+<li>python3.5，函数调用和表达式中可支持更多的解包操作。</li>
+</ol>
 
             </div>
             
@@ -647,7 +686,7 @@ axes.unicode_minus  : False
     </li>
     <li class="post-copyright-link">
       <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="https://fade-color.github.io/post/Jupyterlab-xian-shi-zhong-wen-zi-ti/" title="JupyterLab 显示中文字体">https://fade-color.github.io/post/Jupyterlab-xian-shi-zhong-wen-zi-ti/</a>
+      <a href="https://fade-color.github.io/post/python-de-jie-bao/" title="Python的解包">https://fade-color.github.io/post/python-de-jie-bao/</a>
     </li>
     <li class="post-copyright-license">
       <strong class="language" data-lan="copyright">版权声明： </strong>
@@ -656,7 +695,7 @@ axes.unicode_minus  : False
   </ul>
   <div class="tags">
     
-      <a href="https://fade-color.github.io/tag/JV27a86be/"># matplotlib</a>
+      <a href="https://fade-color.github.io/tag/kvztIB3-U/"># 学习笔记</a>
     
       <a href="https://fade-color.github.io/tag/h-zK4ImM2/"># Python</a>
     
@@ -665,14 +704,14 @@ axes.unicode_minus  : False
     <div class="nav-prev">
       
         <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="Matplotlib更改plot样式" href="https://fade-color.github.io/post/matplotlib-geng-gai-plot-yang-shi/">Matplotlib更改plot样式</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="Matplotlib更改plot样式" href="https://fade-color.github.io/post/matplotlib-geng-gai-plot-yang-shi/">上一篇</a>
+        <a class="nav-pc-next" title="Numpy基本操作" href="https://fade-color.github.io/post/numpy-ji-ben-cao-zuo/">Numpy基本操作</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="Numpy基本操作" href="https://fade-color.github.io/post/numpy-ji-ben-cao-zuo/">上一篇</a>
       
     </div>
     <div class="nav-next">
       
-        <a class="nav-pc-next" title="Numpy基本操作" href="https://fade-color.github.io/post/numpy-ji-ben-cao-zuo/">Numpy基本操作</a>
-        <a class="nav-mobile-next" title="Numpy基本操作" href="https://fade-color.github.io/post/numpy-ji-ben-cao-zuo/">下一篇</a>
+        <a class="nav-pc-next" title="Mac设置终端ssh自动登录" href="https://fade-color.github.io/post/mac-she-zhi-zhong-duan-ssh-zi-dong-deng-lu/">Mac设置终端ssh自动登录</a>
+        <a class="nav-mobile-next" title="Mac设置终端ssh自动登录" href="https://fade-color.github.io/post/mac-she-zhi-zhong-duan-ssh-zi-dong-deng-lu/">下一篇</a>
         <i class="fa fa-chevron-right"></i>
       
     </div>
