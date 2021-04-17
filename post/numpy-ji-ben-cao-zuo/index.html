@@ -8,7 +8,7 @@
 <meta name="keywords" content="Gridea静态个人博客">
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#000">
-<title>七年的万事屋</title>
+<title>Numpy基本操作 | 七年的万事屋</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1618657260254">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -38,6 +38,8 @@
 
 
 
+  <meta name="description" content="Numpy基本操作" />
+  <meta name="keywords" content="" />
 </head>
 
 <body>
@@ -183,10 +185,26 @@
   <div class="main-continer">
     
     <div
-      class="section-layout  pisces">
+      class="section-layout pisces ">
       <div class="section-layout-wrapper">
-        <div id="sidebarMeta" class="sidebar">
-    
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper bg-color right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body pisces" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
 <div class="sidebar-wrapper box-shadow-wrapper bg-color">
   <div class="sidebar-item">
     <img class="site-author-image right-motion" src="/images/avatar.png"/>
@@ -222,64 +240,618 @@
 
 
 </div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper auto-number auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#1-%E6%95%B0%E7%BB%84%E5%88%9B%E5%BB%BA">1. 数组创建</a></li>
+<li><a href="#2-%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97">2. 基本运算</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
 </div>
+
 <script>
-  let sidebarMeta = document.querySelector('#sidebarMeta');
-  let scheme = 'pisces';
-  let sidebarWrapper = document.querySelector('.sidebar-wrapper');
-  if (sidebarMeta && (scheme === 'pisces' || scheme === 'gemini')) {
-    document.addEventListener('scroll', function(e) {
-      if (document.scrollingElement.scrollTop > parseInt(sidebarMeta.style.marginTop) + 10) {
-        sidebarWrapper.classList.add('home-sidebar-fixed')
-      } else {
-        sidebarWrapper.classList.remove('home-sidebar-fixed')
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
       }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
     });
   }
-  </script>
-        <div class="section-box tag-line box-shadow-wrapper">
-          <section class="section tags-section posts-expand bg-color">
-            <div class="padding-wrapper">
-  <div class="tag-timeline-box">
-    <div class="tag-timeline-wrapper">
-      <div class="tag-timeline-title">
-        <h2>
-          matplotlib
-          <small class="language" data-lan="tag">标签</small>
-        </h2>
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
       </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    window.Velocity(hideElement, 'stop');
+    window.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        window.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://fade-color.github.io/post/numpy-ji-ben-cao-zuo/">
+      Numpy基本操作
+    </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2021-04-17 18:55:14">2021-04-17</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span>6<span class="language" data-lan="minute">分钟</span></span>
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span>1205<span class="pc-show language" data-lan="words">字数</span></span>
+    </span>
+    
+  </div>
+</section>
+            <div class="post-body next-md-body" id="post_body">
+              <h3 id="1-数组创建">1. 数组创建</h3>
+<p>numpy中所有的计算都是围绕着数组进行的，因此在运算之前，我们需要将计算的数据表示成数组的形式。</p>
+<ul>
+<li>
+<p>我们可以用<code>np.array()</code>来创建一个数组：</p>
+<pre><code class="language-python">np.array([1, 2, 3, 4, 5])
+# array([1, 2, 3, 4, 5])
+</code></pre>
+</li>
+<li>
+<p><code>np.zeros()</code>创建一个全为零的数组：</p>
+<pre><code class="language-python">np.zeros((2, 3))  # 参数为元组，表示2行3列
+
+# array([[0., 0.],
+#        [0., 0.],
+#        [0., 0.]])
+</code></pre>
+</li>
+<li>
+<p>类似地，可以使用<code>np.ones()</code>创建一个全为1的数组：</p>
+<pre><code class="language-python">np.ones((2, 4))
+
+# array([[1., 1., 1., 1.],
+#        [1., 1., 1., 1.]])
+</code></pre>
+</li>
+<li>
+<p>使用<code>np.arange()</code>创建一个递增或递减的数列，类似于python的<code>range()</code>。</p>
+<pre><code class="language-python">np.arange(3, 7)  # [3, 7)
+# array([3, 4, 5, 6])
+np.arange(3, 10, 2)
+# array([3, 5, 7, 9])
+np.arange(10, 2, -3)
+#array([10,  7,  4])
+</code></pre>
+</li>
+<li>
+<p><code>np.linspace()</code>会返回介于某个区间等间距分布的数，前两个参数是区间的范围，第三个参数是输出样本的总数：</p>
+<pre><code class="language-python"># 返回一个0-1范围内等间距分布的5个数
+np.linspace(0, 1, 5)
+# array([0.  , 0.25, 0.5 , 0.75, 1.  ])
+</code></pre>
+</li>
+<li>
+<p>通过<code>np.random.rand()</code>生成随机的数组(数字范围0-1)：</p>
+<pre><code class="language-python">np.random.rand(2, 4)
+# array([[0.90823579, 0.13280413, 0.48167232, 0.47886157],
+#        [0.73089321, 0.39703329, 0.09461766, 0.5481924 ]])
+</code></pre>
+</li>
+<li>
+<p>在numpy中，数组默认的数据类型是64位的浮点数：</p>
+<pre><code class="language-python">a = np.zeros((2, 4))
+a.dtype
+# dtype('float64')
+</code></pre>
+</li>
+<li>
+<p>可以在创建数组时，通过<code>dtype</code>指定其他的数据类型：</p>
+<pre><code class="language-python">a = np.zeros((2, 4), dtype=np.int32)
+a.dtype
+# dtype('int32')
+</code></pre>
+<p>也可以通过<code>araay.astype()</code>来转换数据类型：</p>
+<pre><code class="language-python">b = a.astype(int)
+b
+# array([[0, 0, 0, 0],
+#        [0, 0, 0, 0]])
+</code></pre>
+</li>
+</ul>
+<h3 id="2-基本运算">2. 基本运算</h3>
+<p>在numpy中我们可以轻松地对数组进行常见的数学运算。</p>
+<ul>
+<li>
+<p>两个相同尺寸的数组可以直接进行四则运算，它会将数组同位置的元素进行加减乘除：</p>
+<pre><code class="language-python">a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+a + b
+# array([5, 7, 9])
+a / b
+# array([0.25, 0.4 , 0.5 ])
+</code></pre>
+</li>
+<li>
+<p>在乘法运算中还有一个点乘<code>np.dot()</code>，这个函数会对两个向量进行点乘运算：</p>
+<pre><code class="language-python">np.dot(a, b)
+# 32
+</code></pre>
+</li>
+<li>
+<p>与之类似的还有矩阵乘法<code>np.matmul()</code></p>
+<pre><code class="language-python">a = np.array([[1, 2],
+              [3, 4]])
+b = np.array([[2, 0],
+              [0, 2]])
+np.matmul(a, b)
+a @ b
+# array([[2, 4],
+#        [6, 8]])
+</code></pre>
+</li>
+<li>
+<p>以下函数对数组中所有数依次运算：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">np.sqrt()</td>
+<td style="text-align:center">开方</td>
+</tr>
+<tr>
+<td style="text-align:center">np.sin(), np.cos(), np.tan()</td>
+<td style="text-align:center">三角函数运算</td>
+</tr>
+<tr>
+<td style="text-align:center">np.log()</td>
+<td style="text-align:center">自然对数</td>
+</tr>
+<tr>
+<td style="text-align:center">np.power()</td>
+<td style="text-align:center">指数</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>广播：</p>
+<pre><code class="language-python">a = np.array([1, 2, 3])
+a * 5
+# array([5, 10, 15])
+</code></pre>
+<p>不同维度的数组也可以进行直接运算</p>
+<pre><code class="language-python">a = np.array([[1],
+              [10],
+              [20]])
+b = np.array([0, 1, 2])
+a + b
+# array([[ 1,  2,  3],
+#        [10, 11, 12],
+#        [20, 21, 22]])
+</code></pre>
+<p>在运算之前，numpy会将这两个数组扩展至相同的尺寸，然后再将相同位置的元素相加</p>
+<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2021/03/22/3ZAxQgTJN6GhW4H.png" alt="222" loading="lazy"></figure>
+</li>
+<li>
+<p>常用函数：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">min(), max()</td>
+<td style="text-align:center">最小值，最大值</td>
+</tr>
+<tr>
+<td style="text-align:center">argmin(), argmax()</td>
+<td style="text-align:center">最小值，最大值的索引</td>
+</tr>
+<tr>
+<td style="text-align:center">sum()</td>
+<td style="text-align:center">求所有数据的总和</td>
+</tr>
+<tr>
+<td style="text-align:center">mean()</td>
+<td style="text-align:center">平均值</td>
+</tr>
+<tr>
+<td style="text-align:center">median()</td>
+<td style="text-align:center">中位数</td>
+</tr>
+<tr>
+<td style="text-align:center">var()</td>
+<td style="text-align:center">方差</td>
+</tr>
+<tr>
+<td style="text-align:center">std()</td>
+<td style="text-align:center">标准差</td>
+</tr>
+</tbody>
+</table>
+<p>对于上面的函数，如果数组为多维数组，可以通过指定axis来指定维度：</p>
+<p>axis=0时，会将每一<strong>行</strong>中<strong>对应的数据</strong>相加，axis=0代表第一个维度，也就是行</p>
+<figure data-type="image" tabindex="2"><img src="https://i.loli.net/2021/03/23/ztaGP1qy5TjViYX.png" alt="image-20210323091551739" loading="lazy"></figure>
+<pre><code class="language-python">a = np.array([[1, 2, 3, 4, 5],
+              [5, 6, 7, 8, 9]])
+a.sum()  # 所有元素的和
+# 50
+a.sum(axis=0)  # 每行对应数据相加，也就是按列求和
+# array([ 6,  8, 10, 12, 14])
+</code></pre>
+<p>以此类推，axis=1时代表第二个维度，也就是列</p>
+<figure data-type="image" tabindex="3"><img src="https://i.loli.net/2021/03/23/PZ5OTM6wltbBmgF.png" alt="image-20210323091742759" loading="lazy"></figure>
+<pre><code class="language-python">a.sum(axis=1)  # 每列对应数据相加，也就是按行求和
+# array([15, 35])
+</code></pre>
+</li>
+<li>
+<p>获取元素</p>
+<p>获取元素和python中list用法基本一致</p>
+<pre><code class="language-python">a = np.array([[1, 2, 3],
+              [4, 5, 6]])
+# 获取第1行第2列的值
+a[0, 1]  # a[0][1]同样
+# 2
+</code></pre>
+<p>同样支持切片</p>
+<pre><code class="language-python"># 获取第一行[0,2)列的数据
+a[0, 0:2]  # a[0][0:2]
+# array([1, 2])
+
+# 获取第一行数据
+a[0, :]  # a[0][:]
+a[0]
+# array([1, 2, 3])
+
+# 获取第一行数据，间距为2
+a[0, ::2]
+# array([1, 3])
+
+# 获取第一行数据，倒序，间距为2
+a[0, ::-2]
+# 等同于
+a[0, -1:-4:-2]  # 倒数第一个到倒数第四个(不包括)，间距为2
+# array([3, 1])
+
+a[0, 3:0:-2]  # 从3到0(不包括0)，跨度为2
+# array([3])
+</code></pre>
+</li>
+<li>
+<p>条件筛选指定元素</p>
+<pre><code class="language-python">a = np.arange(10)
+a
+# array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+a &lt; 2
+# array([ True,  True, False, False, False, False, False, False, False,
+#        False])
+
+a[a &lt; 2]
+# array([0, 1])
+</code></pre>
+<p>还可以通过逻辑运算符组合不同的条件，需要注意的是，与运算使用“&amp;”，或运算使用“|”</p>
+<pre><code class="language-python">a[(a &gt; 3) &amp; (a % 2 == 0)]
+# array([4, 6, 8])
+
+a[(a &lt; 5) | (a % 2 == 0)]
+# array([0, 1, 2, 3, 4, 6, 8])
+</code></pre>
+<p>不能使用类似<code>2 &lt; a &lt; 5</code>这种条件筛选</p>
+<pre><code class="language-python">a[(2 &lt; a &lt; 5) | (a % 2 == 0)]  # 报错
+# ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+</code></pre>
+</li>
+</ul>
+
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      七年
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://fade-color.github.io/post/numpy-ji-ben-cao-zuo/" title="Numpy基本操作">https://fade-color.github.io/post/numpy-ji-ben-cao-zuo/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
       
+    </div>
+    <div class="nav-next">
       
-      
-      
-      
-      <a href="https://fade-color.github.io/post/Jupyterlab-xian-shi-zhong-wen-zi-ti/">
-        <div class="motion-warpper">
-          <div class="tag-post-node">
-            <h1>
-              04-17
-              <small>JupyterLab 显示中文字体</small>
-            </h1>
-          </div>
-        </div>
-      </a>
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+        <a class="nav-pc-next" title="JupyterLab 显示中文字体" href="https://fade-color.github.io/post/Jupyterlab-xian-shi-zhong-wen-zi-ti/">JupyterLab 显示中文字体</a>
+        <a class="nav-mobile-next" title="JupyterLab 显示中文字体" href="https://fade-color.github.io/post/Jupyterlab-xian-shi-zhong-wen-zi-ti/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
       
     </div>
   </div>
 </div>
-          </section>
+            
+            
+  
+
+          </div>
         </div>
       </div>
     </div>
@@ -486,6 +1058,223 @@
     parent.insertBefore(aelem, next);
   })
 </script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip">打开微信扫一扫，即可进行扫码打赏哦</p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        window.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        window.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        window.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        window.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn.addEventListener('click', (e) => {
+      window.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
   </div>
 </body>
 
@@ -1223,7 +2012,6 @@ esac
 
 
 <script src="/media/js/mouse/love.js"></script>
-
 
 
 
