@@ -9,7 +9,7 @@
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#000">
 <title>七年的万事屋</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1618663047337">
+<link rel="shortcut icon" href="/favicon.ico?v=1618664463665">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -197,7 +197,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">6</span>
+        <span class="site-item-stat-count">7</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -617,6 +617,98 @@
         
         <div class="post-button text-center">
           <a class="btn language" data-lan="read-more" href="https://fade-color.github.io/post/numpy-ji-ben-cao-zuo/" rel="contents">
+            阅读全文 »
+          </a>
+        </div>
+        
+      </div>
+      
+    </div>
+  </article>
+
+  <article class="post-list-box  post box-shadow-wrapper">
+    <div class="article-wrapper bg-color">
+      <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://fade-color.github.io/post/python-zhuang-shi-qi-zong-jie/">
+      Python装饰器总结
+    </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2021-03-16 21:00:30">2021-03-16</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">分类于</span>
+      
+      
+      <a href="https://fade-color.github.io/tag/kvztIB3-U/">
+        <span>学习笔记</span>
+      </a>、
+      
+      
+      
+      <a href="https://fade-color.github.io/tag/h-zK4ImM2/">
+        <span>Python</span>
+      </a>
+      
+      
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span>3<span class="language" data-lan="minute">分钟</span></span>
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span>650<span class="pc-show language" data-lan="words">字数</span></span>
+    </span>
+    
+  </div>
+</section>
+      <div class="post-body">
+        
+        
+          
+            <!-- 没有手动摘要切开启了自动摘要,则根据配置筛除摘要内容 -->
+            
+            
+              
+              
+              
+            
+              
+              
+              
+            
+              
+              
+              
+            
+            
+              <p><h3 id="装饰器">装饰器</h3>
+<pre><code class="language-python"># --------------- 装饰器 --------------- #
+def decorator1(func):  # 传入被装饰的函数
+
+                
+                  <!-- 自动摘要出来的内容有<code则补上结尾,防止格式错误 -->
+                  </code></pre>
+                
+              <p>
+            
+          
+        
+        
+        <div class="post-button text-center">
+          <a class="btn language" data-lan="read-more" href="https://fade-color.github.io/post/python-zhuang-shi-qi-zong-jie/" rel="contents">
             阅读全文 »
           </a>
         </div>
@@ -2244,6 +2336,162 @@ a[(a &amp;lt; 5) | (a % 2 == 0)]
 &lt;/li&gt;
 &lt;/ul&gt;
 ">Numpy基本操作</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://fade-color.github.io/post/python-zhuang-shi-qi-zong-jie/"" data-c="
+          &lt;h3 id=&#34;装饰器&#34;&gt;装饰器&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# --------------- 装饰器 --------------- #
+def decorator1(func):  # 传入被装饰的函数
+    # 嵌套内函数可以看做被装饰的函数
+    def inner():
+        print(&amp;quot;-------- inner --------&amp;quot;)
+        func()
+        print(&amp;quot;-----------------------&amp;quot;)
+
+    return inner
+
+
+@decorator1
+def func1():
+    print(&amp;quot;This is func1...&amp;quot;)
+
+
+func1()
+print()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;打印结果：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;-------- inner --------
+This is func1...
+-----------------------
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;被装饰的函数带参数的装饰器&#34;&gt;被装饰的函数带参数的装饰器&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# --------------- 被装饰的函数带参数的装饰器 --------------- #
+def decorator2(func):  # 传入被装饰的函数
+    # 嵌套内函数可以看做被装饰的函数，所以被装饰函数的参数要写在inner的形参列表里，调用被装饰的函数时传入
+    def inner(arg):
+        print(&amp;quot;-------- inner --------&amp;quot;)
+        func(arg)
+        print(&amp;quot;-----------------------&amp;quot;)
+
+    return inner
+
+
+@decorator2
+def func2(arg):
+    print(f&amp;quot;This is func2...arg:{arg}&amp;quot;)
+
+
+func2(&amp;quot;hello&amp;quot;)
+print()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;打印结果：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;-------- inner --------
+This is func2...arg:hello
+-----------------------
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;带返回值的函数的装饰器&#34;&gt;带返回值的函数的装饰器&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# --------------- 带返回值函数的装饰器 --------------- #
+def decorator3(func):  # 传入被装饰的函数
+    # 嵌套内函数可以看做被装饰的函数，所以被装饰函数的参数要写在inner的形参列表里，调用被装饰的函数时传入
+    def inner(arg):
+        print(&amp;quot;-------- inner --------&amp;quot;)
+        str_ = func(arg)
+        print(&amp;quot;-----------------------&amp;quot;)
+        return str_
+
+    return inner
+
+
+@decorator3
+def func3(arg):
+    return f&amp;quot;This is func3...arg:{arg}&amp;quot;
+
+
+print(func3(&amp;quot;hello&amp;quot;), &amp;quot;\n&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;打印结果：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;-------- inner --------
+-----------------------
+This is func3...arg:hello 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;带参数的装饰器&#34;&gt;带参数的装饰器&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# --------------- 带参数的装饰器 --------------- #
+def decorator4(deco_arg):  # 带参数的装饰器再嵌套一层函数，传入装饰器的参数
+    def outer(func):  # 传入被装饰的函数
+        # 嵌套内函数可以看做被装饰的函数，所以被装饰函数的参数要写在inner的形参列表里，调用被装饰的函数时传入
+        def inner(arg):  # 被装饰的函数的参数
+            print(&amp;quot;-------- inner --------&amp;quot;)
+            print(&amp;quot;decorator_arg:&amp;quot;, deco_arg)
+            func(arg)
+            print(&amp;quot;-----------------------&amp;quot;)
+
+        return inner
+
+    return outer
+
+
+# 括号表示函数的调用，可以理解为此时调用了decorator4函数，此函数返回一个真正要用的装饰器outer
+@decorator4(&amp;quot;deco_arg&amp;quot;)
+def func4(arg):
+    print(f&amp;quot;This is func4...arg:{arg}&amp;quot;)
+
+
+func4(&amp;quot;hello&amp;quot;)
+print()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;打印结果：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;-------- inner --------
+decorator_arg: deco_arg
+This is func4...arg:hello
+-----------------------
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;多个装饰器&#34;&gt;多个装饰器&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# --------------- 多个装饰器 --------------- #
+def decorator5(func):
+    print(&amp;quot;This is decorator5...&amp;quot;)
+
+    def inner(arg):  # 被装饰的函数inner及其参数
+        print(&amp;quot;----- decorator5 inner -----&amp;quot;)
+        func(arg)  # 此时调用的是inner(arg)
+        print(&amp;quot;----------------------------&amp;quot;)
+
+    return inner
+
+
+def decorator6(func):
+    print(&amp;quot;This is decorator6...&amp;quot;)
+
+    def inner(arg):  # 被装饰的函数func4及其参数
+        print(&amp;quot;----- decorator6 inner -----&amp;quot;)
+        func(arg)  # 调用func5
+        print(&amp;quot;----------------------------&amp;quot;)
+
+    return inner
+
+
+@decorator5
+@decorator6
+def func5(arg):
+    print(f&amp;quot;This is func5... arg:{arg}&amp;quot;)
+
+
+func5(&amp;quot;hello&amp;quot;)
+
+# 等同于
+# func4 = decorator4(decorator5(func4))
+# func4(&amp;quot;hello&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;打印结果：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;This is decorator6...
+This is decorator5...
+----- decorator5 inner -----
+----- decorator6 inner -----
+This is func5... arg:hello
+----------------------------
+----------------------------
+&lt;/code&gt;&lt;/pre&gt;
+">Python装饰器总结</a>
       </div>
       
       <div class="item">

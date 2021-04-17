@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://fade-color.github.io</id>
     <title>七年的万事屋</title>
-    <updated>2021-04-17T12:37:41.193Z</updated>
+    <updated>2021-04-17T13:01:08.559Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://fade-color.github.io"/>
     <link rel="self" href="https://fade-color.github.io/atom.xml"/>
@@ -1201,6 +1201,165 @@ a[(a &lt; 5) | (a % 2 == 0)]
 </code></pre>
 </li>
 </ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python装饰器总结]]></title>
+        <id>https://fade-color.github.io/post/python-zhuang-shi-qi-zong-jie/</id>
+        <link href="https://fade-color.github.io/post/python-zhuang-shi-qi-zong-jie/">
+        </link>
+        <updated>2021-03-16T13:00:30.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="装饰器">装饰器</h3>
+<pre><code class="language-python"># --------------- 装饰器 --------------- #
+def decorator1(func):  # 传入被装饰的函数
+    # 嵌套内函数可以看做被装饰的函数
+    def inner():
+        print(&quot;-------- inner --------&quot;)
+        func()
+        print(&quot;-----------------------&quot;)
+
+    return inner
+
+
+@decorator1
+def func1():
+    print(&quot;This is func1...&quot;)
+
+
+func1()
+print()
+</code></pre>
+<p>打印结果：</p>
+<pre><code>-------- inner --------
+This is func1...
+-----------------------
+</code></pre>
+<h3 id="被装饰的函数带参数的装饰器">被装饰的函数带参数的装饰器</h3>
+<pre><code class="language-python"># --------------- 被装饰的函数带参数的装饰器 --------------- #
+def decorator2(func):  # 传入被装饰的函数
+    # 嵌套内函数可以看做被装饰的函数，所以被装饰函数的参数要写在inner的形参列表里，调用被装饰的函数时传入
+    def inner(arg):
+        print(&quot;-------- inner --------&quot;)
+        func(arg)
+        print(&quot;-----------------------&quot;)
+
+    return inner
+
+
+@decorator2
+def func2(arg):
+    print(f&quot;This is func2...arg:{arg}&quot;)
+
+
+func2(&quot;hello&quot;)
+print()
+</code></pre>
+<p>打印结果：</p>
+<pre><code>-------- inner --------
+This is func2...arg:hello
+-----------------------
+</code></pre>
+<h3 id="带返回值的函数的装饰器">带返回值的函数的装饰器</h3>
+<pre><code class="language-python"># --------------- 带返回值函数的装饰器 --------------- #
+def decorator3(func):  # 传入被装饰的函数
+    # 嵌套内函数可以看做被装饰的函数，所以被装饰函数的参数要写在inner的形参列表里，调用被装饰的函数时传入
+    def inner(arg):
+        print(&quot;-------- inner --------&quot;)
+        str_ = func(arg)
+        print(&quot;-----------------------&quot;)
+        return str_
+
+    return inner
+
+
+@decorator3
+def func3(arg):
+    return f&quot;This is func3...arg:{arg}&quot;
+
+
+print(func3(&quot;hello&quot;), &quot;\n&quot;)
+</code></pre>
+<p>打印结果：</p>
+<pre><code>-------- inner --------
+-----------------------
+This is func3...arg:hello 
+</code></pre>
+<h3 id="带参数的装饰器">带参数的装饰器</h3>
+<pre><code class="language-python"># --------------- 带参数的装饰器 --------------- #
+def decorator4(deco_arg):  # 带参数的装饰器再嵌套一层函数，传入装饰器的参数
+    def outer(func):  # 传入被装饰的函数
+        # 嵌套内函数可以看做被装饰的函数，所以被装饰函数的参数要写在inner的形参列表里，调用被装饰的函数时传入
+        def inner(arg):  # 被装饰的函数的参数
+            print(&quot;-------- inner --------&quot;)
+            print(&quot;decorator_arg:&quot;, deco_arg)
+            func(arg)
+            print(&quot;-----------------------&quot;)
+
+        return inner
+
+    return outer
+
+
+# 括号表示函数的调用，可以理解为此时调用了decorator4函数，此函数返回一个真正要用的装饰器outer
+@decorator4(&quot;deco_arg&quot;)
+def func4(arg):
+    print(f&quot;This is func4...arg:{arg}&quot;)
+
+
+func4(&quot;hello&quot;)
+print()
+</code></pre>
+<p>打印结果：</p>
+<pre><code>-------- inner --------
+decorator_arg: deco_arg
+This is func4...arg:hello
+-----------------------
+</code></pre>
+<h3 id="多个装饰器">多个装饰器</h3>
+<pre><code class="language-python"># --------------- 多个装饰器 --------------- #
+def decorator5(func):
+    print(&quot;This is decorator5...&quot;)
+
+    def inner(arg):  # 被装饰的函数inner及其参数
+        print(&quot;----- decorator5 inner -----&quot;)
+        func(arg)  # 此时调用的是inner(arg)
+        print(&quot;----------------------------&quot;)
+
+    return inner
+
+
+def decorator6(func):
+    print(&quot;This is decorator6...&quot;)
+
+    def inner(arg):  # 被装饰的函数func4及其参数
+        print(&quot;----- decorator6 inner -----&quot;)
+        func(arg)  # 调用func5
+        print(&quot;----------------------------&quot;)
+
+    return inner
+
+
+@decorator5
+@decorator6
+def func5(arg):
+    print(f&quot;This is func5... arg:{arg}&quot;)
+
+
+func5(&quot;hello&quot;)
+
+# 等同于
+# func4 = decorator4(decorator5(func4))
+# func4(&quot;hello&quot;)
+</code></pre>
+<p>打印结果：</p>
+<pre><code>This is decorator6...
+This is decorator5...
+----- decorator5 inner -----
+----- decorator6 inner -----
+This is func5... arg:hello
+----------------------------
+----------------------------
+</code></pre>
 ]]></content>
     </entry>
     <entry>
