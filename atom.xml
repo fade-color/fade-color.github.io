@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://fade-color.github.io</id>
     <title>七年的万事屋</title>
-    <updated>2021-04-17T13:28:29.873Z</updated>
+    <updated>2021-04-18T09:03:12.109Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://fade-color.github.io"/>
     <link rel="self" href="https://fade-color.github.io/atom.xml"/>
@@ -15,7 +15,7 @@
         <id>https://fade-color.github.io/post/ji-qi-xue-xi-bi-ji-01-k-jin-lin-suan-fa-jian-jie/</id>
         <link href="https://fade-color.github.io/post/ji-qi-xue-xi-bi-ji-01-k-jin-lin-suan-fa-jian-jie/">
         </link>
-        <updated>2021-04-05T08:01:08.000Z</updated>
+        <updated>2021-04-18T08:01:08.000Z</updated>
         <content type="html"><![CDATA[<h3 id="11-k-近邻算法knn概念">1.1. K-近邻算法(KNN)概念</h3>
 <p>K Nearest Neighbor算法又叫KNN算法</p>
 <ul>
@@ -779,6 +779,116 @@ print(&quot;准确率为：\n&quot;, score)
 <h3 id="111-项目描述">11.1. 项目描述</h3>
 <p>项目目的是预测一个人将要签到的地方。其中给定的虚拟世界包括<strong>10km*10km共100 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi><msup><mi>m</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">km^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mord"><span class="mord mathdefault">m</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> 的约10w个地方</strong>。对于给定的坐标集，任务是<strong>根据用户的位置，准确性和时间戳等预测用户下一次的签到位置</strong>。数据被制作成类似于来自移动设备的位置数据。</p>
 <h3 id="112-数据集介绍">11.2. 数据集介绍</h3>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Pandas-01-基本数据操作]]></title>
+        <id>https://fade-color.github.io/post/pandas-01-ji-ben-shu-ju-cao-zuo/</id>
+        <link href="https://fade-color.github.io/post/pandas-01-ji-ben-shu-ju-cao-zuo/">
+        </link>
+        <updated>2021-04-04T12:59:46.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li>导入数据</li>
+</ul>
+<pre><code class="language-python"># 读取文件
+data = pd.read_csv(&quot;./data/stock_day.csv&quot;)
+
+# 删除一些无用列
+data = data.drop([&quot;ma5&quot;, &quot;ma10&quot;, &quot;ma20&quot;, &quot;v_ma5&quot;, &quot;v_ma10&quot;, &quot;v_ma20&quot;], axis=1)
+</code></pre>
+<img src="https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210312104037221.png" alt="image-20210312104037221" style="zoom:50%;" />
+<h3 id="1-索引操作">1. 索引操作</h3>
+<ul>
+<li>
+<p>直接行列索引（先列后行）</p>
+<pre><code class="language-python"># 先列后行
+data[&quot;open&quot;][&quot;2018-02-27&quot;]  # 23.53
+
+# 不支持的操作
+# 先行后列
+data[&quot;2018-02-27&quot;][&quot;open&quot;]
+# 切片
+data[:1, :2]
+</code></pre>
+</li>
+<li>
+<p>使用loc和iloc索引</p>
+<pre><code class="language-python"># loc:仅支持行列名索引
+data.loc[&quot;2018-02-27&quot;:&quot;2018-02-14&quot;, &quot;open&quot;:&quot;close&quot;]
+
+# iloc:通过下标进行索引
+data.iloc[:3, :5]  # 前3行，前5列
+</code></pre>
+</li>
+<li>
+<p>使用ix组合索引</p>
+<blockquote>
+<p>在pandas 0.20.0版本中此方法被废弃，使用.iloc和.loc组合索引。</p>
+</blockquote>
+<p>获取第1-4天，[&quot;open&quot;, &quot;close&quot;, &quot;high&quot;, &quot;low&quot;]这四个指标的结果</p>
+<pre><code class="language-python"># 使用ix进行下标和列名组合索引
+data.ix[0:4, [&quot;open&quot;, &quot;close&quot;, &quot;high&quot;, &quot;low&quot;]]
+
+# 推荐使用loc和iloc组合
+data.loc[data.index[0:4], [&quot;open&quot;, &quot;close&quot;, &quot;high&quot;, &quot;low&quot;]]
+# 或
+data.iloc[0:4, data.columns.get_indexer([&quot;open&quot;, &quot;close&quot;, &quot;high&quot;, &quot;low&quot;])]
+</code></pre>
+</li>
+</ul>
+<h3 id="2-赋值操作">2. 赋值操作</h3>
+<pre><code class="language-python"># 直接修改原来的值
+data[&quot;close&quot;] = 1
+# 或者
+data.close = 1
+</code></pre>
+<h3 id="3-排序">3. 排序</h3>
+<h4 id="31-dataframe排序">3.1. DataFrame排序</h4>
+<ul>
+<li>
+<p>使用<code>dataframe.sort_values(by=,ascending=)</code></p>
+<ul>
+<li>指定单个键或多个键进行排序</li>
+<li>参数：
+<ul>
+<li>by：指定排序参考的键</li>
+<li>ascending：默认升序
+<ul>
+<li><code>ascending=True</code>：升序</li>
+<li><code>ascending=False</code>：降序</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-python"># 根据开盘价降序排序
+data.sort_values(by=&quot;open&quot;, ascending=False).head()
+
+# 根据开盘价和最高价升序排序
+data.sort_values(by=[&quot;open&quot;, &quot;high&quot;], ascending=True).head()
+</code></pre>
+</li>
+<li>
+<p>使用<code>dataframe.sort_index()</code>以索引进行排序</p>
+<p>默认升序，同样可以指定<code>ascending=False</code>来进行降序排序</p>
+<pre><code class="language-python"># 以行（日期）进行升序排序
+data.sort_index()
+</code></pre>
+</li>
+</ul>
+<h4 id="32-series排序">3.2. Series排序</h4>
+<ul>
+<li>
+<p>使用<code>series.sort_values(ascending=)</code>以列排序</p>
+<pre><code class="language-python">data[&quot;high&quot;].sort_values().head()
+</code></pre>
+</li>
+<li>
+<p>使用<code>series.sort_index(ascending=)</code>以索引排序</p>
+<pre><code class="language-python">data[&quot;high&quot;].sort_index(ascending=False).head()
+</code></pre>
+</li>
+</ul>
 ]]></content>
     </entry>
     <entry>

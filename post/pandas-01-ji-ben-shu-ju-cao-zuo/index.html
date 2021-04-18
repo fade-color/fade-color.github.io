@@ -8,7 +8,7 @@
 <meta name="keywords" content="Gridea静态个人博客">
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#000">
-<title>Matplotlib更改plot样式 | 七年的万事屋</title>
+<title>Pandas-01-基本数据操作 | 七年的万事屋</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1618736589261">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -38,8 +38,8 @@
 
 
 
-  <meta name="description" content="Matplotlib更改plot样式" />
-  <meta name="keywords" content="matplotlib" />
+  <meta name="description" content="Pandas-01-基本数据操作" />
+  <meta name="keywords" content="pandas,学习笔记" />
 </head>
 
 <body>
@@ -203,7 +203,8 @@
       <div class="sidebar-body gemini" id="sidebar_body">
         
           
-            
+            <div class="post-side-meta" id="post_side_meta">
+              
 <div class="sidebar-wrapper box-shadow-wrapper bg-color">
   <div class="sidebar-item">
     <img class="site-author-image right-motion" src="/images/avatar.png"/>
@@ -257,6 +258,206 @@
   </div>
 
 </div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper auto-number auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#1-%E7%B4%A2%E5%BC%95%E6%93%8D%E4%BD%9C">1. 索引操作</a></li>
+<li><a href="#2-%E8%B5%8B%E5%80%BC%E6%93%8D%E4%BD%9C">2. 赋值操作</a></li>
+<li><a href="#3-%E6%8E%92%E5%BA%8F">3. 排序</a>
+<ul>
+<li><a href="#31-dataframe%E6%8E%92%E5%BA%8F">3.1. DataFrame排序</a></li>
+<li><a href="#32-series%E6%8E%92%E5%BA%8F">3.2. Series排序</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
           
         
       </div>
@@ -344,8 +545,8 @@
           <div class="section bg-color post post-page">
             <section class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://fade-color.github.io/post/matplotlib-geng-gai-plot-yang-shi/">
-      Matplotlib更改plot样式
+    <a class="post-title-link" href="https://fade-color.github.io/post/pandas-01-ji-ben-shu-ju-cao-zuo/">
+      Pandas-01-基本数据操作
     </a>
   </h1>
   <div class="post-meta">
@@ -353,7 +554,7 @@
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2021-04-04 20:33:40">2021-04-04</span>
+      <span class="publish-time" data-t="2021-04-04 20:59:46">2021-04-04</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
@@ -362,8 +563,14 @@
       <span class="pc-show language" data-lan="category-in">分类于</span>
       
       
-      <a href="https://fade-color.github.io/tag/JV27a86be/">
-        <span>matplotlib</span>
+      <a href="https://fade-color.github.io/tag/3vqqiUjyf/">
+        <span>pandas</span>
+      </a>、
+      
+      
+      
+      <a href="https://fade-color.github.io/tag/kvztIB3-U/">
+        <span>学习笔记</span>
       </a>
       
       
@@ -372,101 +579,119 @@
     
     <span class="meta-item">
       <i class="fa fa-clock-o"></i>
-      <span>2<span class="language" data-lan="minute">分钟</span></span>
+      <span>3<span class="language" data-lan="minute">分钟</span></span>
     </span>
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>419<span class="pc-show language" data-lan="words">字数</span></span>
+      <span>481<span class="pc-show language" data-lan="words">字数</span></span>
     </span>
     
   </div>
 </section>
             <div class="post-body next-md-body" id="post_body">
-              <p>觉得Matplotlib.pyplot原本的样式不够好看，于是就研究了一下怎么更改其样式</p>
-<p>plt是自带了很多样式的，输入以下代码查看自带样式：</p>
-<pre><code class="language-python">import matplotlib.pyplot as plt
-
-plt.style.available
-</code></pre>
-<p>输出结果如下：</p>
-<pre><code class="language-python">['Solarize_Light2',
- '_classic_test_patch',
- 'bmh',
- 'classic',
- 'dark_background',
- 'fast',
- 'fivethirtyeight',
- 'ggplot',
- 'grayscale',
- 'seaborn',
- 'seaborn-bright',
- 'seaborn-colorblind',
- 'seaborn-dark',
- 'seaborn-dark-palette',
- 'seaborn-darkgrid',
- 'seaborn-deep',
- 'seaborn-muted',
- 'seaborn-notebook',
- 'seaborn-paper',
- 'seaborn-pastel',
- 'seaborn-poster',
- 'seaborn-talk',
- 'seaborn-ticks',
- 'seaborn-white',
- 'seaborn-whitegrid',
- 'tableau-colorblind10']
-</code></pre>
-<p>这里就是全部自带的主题了</p>
-<p>应用样式：</p>
-<pre><code class="language-python">plt.style.use('seaborn-darkgrid')
-</code></pre>
-<p>再进行画图就可以看到效果了</p>
-<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2021/04/17/aeUEAoxN3SB19pq.png" alt="函数" loading="lazy"></figure>
-<p>如果想要将该样式设为默认，就要修改<code>matplotlibrc</code>文件使其永久生效：</p>
-<p>找到要应用的样式文件（以seaborn-darkgrid为例）：</p>
-<p>windows下可以用everything进行搜索，mac下可以进到python包目录下的matplotlib文件夹下搜索</p>
-<p>搜索<code>seaborn-darkgrid.mplstyle</code>文件，如下：</p>
-<figure data-type="image" tabindex="2"><img src="https://i.loli.net/2021/04/17/TdUYaQoZmyHsh2q.png" alt="image-20210417103801262" loading="lazy"></figure>
-<p>用文本编辑器打开内容如下：</p>
-<pre><code class="language-yml"># Seaborn common parameters
-# .15 = dark_gray
-# .8 = light_gray
-figure.facecolor: white
-text.color: .15
-axes.labelcolor: .15
-legend.frameon: False
-legend.numpoints: 1
-legend.scatterpoints: 1
-xtick.direction: out
-ytick.direction: out
-xtick.color: .15
-ytick.color: .15
-axes.axisbelow: True
-image.cmap: Greys
-font.family: sans-serif
-font.sans-serif: Arial, Liberation Sans, DejaVu Sans, Bitstream Vera Sans, sans-serif
-grid.linestyle: -
-lines.solid_capstyle: round
-
-# Seaborn darkgrid parameters
-axes.grid: True
-axes.facecolor: EAEAF2
-axes.edgecolor: white
-axes.linewidth: 0
-grid.color: white
-xtick.major.size: 0
-ytick.major.size: 0
-xtick.minor.size: 0
-ytick.minor.size: 0
-</code></pre>
-<p>接下来找到<code>matplotlibrc</code>文件：</p>
-<ul>
-<li>Mac：直接打开终端输入<code>vim ~/.matplotlib/matplotlibrc</code></li>
-<li>Win：在<code>C:/Users</code>找到用户目录进入后把显示隐藏文件打开，进入到<code>.matplotlib</code>文件夹即可找到该文件（如果没有就新建一个）</li>
+              <ul>
+<li>导入数据</li>
 </ul>
-<p>将<code>seaborn-darkgrid.mplstyle</code>文件中的内容复制到<code>matplotlibrc</code>文件中即可。</p>
-<p>重启JupyterLab即可看到效果。</p>
+<pre><code class="language-python"># 读取文件
+data = pd.read_csv(&quot;./data/stock_day.csv&quot;)
+
+# 删除一些无用列
+data = data.drop([&quot;ma5&quot;, &quot;ma10&quot;, &quot;ma20&quot;, &quot;v_ma5&quot;, &quot;v_ma10&quot;, &quot;v_ma20&quot;], axis=1)
+</code></pre>
+<img src="https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210312104037221.png" alt="image-20210312104037221" style="zoom:50%;" />
+<h3 id="1-索引操作">1. 索引操作</h3>
+<ul>
+<li>
+<p>直接行列索引（先列后行）</p>
+<pre><code class="language-python"># 先列后行
+data[&quot;open&quot;][&quot;2018-02-27&quot;]  # 23.53
+
+# 不支持的操作
+# 先行后列
+data[&quot;2018-02-27&quot;][&quot;open&quot;]
+# 切片
+data[:1, :2]
+</code></pre>
+</li>
+<li>
+<p>使用loc和iloc索引</p>
+<pre><code class="language-python"># loc:仅支持行列名索引
+data.loc[&quot;2018-02-27&quot;:&quot;2018-02-14&quot;, &quot;open&quot;:&quot;close&quot;]
+
+# iloc:通过下标进行索引
+data.iloc[:3, :5]  # 前3行，前5列
+</code></pre>
+</li>
+<li>
+<p>使用ix组合索引</p>
+<blockquote>
+<p>在pandas 0.20.0版本中此方法被废弃，使用.iloc和.loc组合索引。</p>
+</blockquote>
+<p>获取第1-4天，[&quot;open&quot;, &quot;close&quot;, &quot;high&quot;, &quot;low&quot;]这四个指标的结果</p>
+<pre><code class="language-python"># 使用ix进行下标和列名组合索引
+data.ix[0:4, [&quot;open&quot;, &quot;close&quot;, &quot;high&quot;, &quot;low&quot;]]
+
+# 推荐使用loc和iloc组合
+data.loc[data.index[0:4], [&quot;open&quot;, &quot;close&quot;, &quot;high&quot;, &quot;low&quot;]]
+# 或
+data.iloc[0:4, data.columns.get_indexer([&quot;open&quot;, &quot;close&quot;, &quot;high&quot;, &quot;low&quot;])]
+</code></pre>
+</li>
+</ul>
+<h3 id="2-赋值操作">2. 赋值操作</h3>
+<pre><code class="language-python"># 直接修改原来的值
+data[&quot;close&quot;] = 1
+# 或者
+data.close = 1
+</code></pre>
+<h3 id="3-排序">3. 排序</h3>
+<h4 id="31-dataframe排序">3.1. DataFrame排序</h4>
+<ul>
+<li>
+<p>使用<code>dataframe.sort_values(by=,ascending=)</code></p>
+<ul>
+<li>指定单个键或多个键进行排序</li>
+<li>参数：
+<ul>
+<li>by：指定排序参考的键</li>
+<li>ascending：默认升序
+<ul>
+<li><code>ascending=True</code>：升序</li>
+<li><code>ascending=False</code>：降序</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-python"># 根据开盘价降序排序
+data.sort_values(by=&quot;open&quot;, ascending=False).head()
+
+# 根据开盘价和最高价升序排序
+data.sort_values(by=[&quot;open&quot;, &quot;high&quot;], ascending=True).head()
+</code></pre>
+</li>
+<li>
+<p>使用<code>dataframe.sort_index()</code>以索引进行排序</p>
+<p>默认升序，同样可以指定<code>ascending=False</code>来进行降序排序</p>
+<pre><code class="language-python"># 以行（日期）进行升序排序
+data.sort_index()
+</code></pre>
+</li>
+</ul>
+<h4 id="32-series排序">3.2. Series排序</h4>
+<ul>
+<li>
+<p>使用<code>series.sort_values(ascending=)</code>以列排序</p>
+<pre><code class="language-python">data[&quot;high&quot;].sort_values().head()
+</code></pre>
+</li>
+<li>
+<p>使用<code>series.sort_index(ascending=)</code>以索引排序</p>
+<pre><code class="language-python">data[&quot;high&quot;].sort_index(ascending=False).head()
+</code></pre>
+</li>
+</ul>
 
             </div>
             
@@ -479,7 +704,7 @@ ytick.minor.size: 0
     </li>
     <li class="post-copyright-link">
       <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="https://fade-color.github.io/post/matplotlib-geng-gai-plot-yang-shi/" title="Matplotlib更改plot样式">https://fade-color.github.io/post/matplotlib-geng-gai-plot-yang-shi/</a>
+      <a href="https://fade-color.github.io/post/pandas-01-ji-ben-shu-ju-cao-zuo/" title="Pandas-01-基本数据操作">https://fade-color.github.io/post/pandas-01-ji-ben-shu-ju-cao-zuo/</a>
     </li>
     <li class="post-copyright-license">
       <strong class="language" data-lan="copyright">版权声明： </strong>
@@ -488,21 +713,23 @@ ytick.minor.size: 0
   </ul>
   <div class="tags">
     
-      <a href="https://fade-color.github.io/tag/JV27a86be/"># matplotlib</a>
+      <a href="https://fade-color.github.io/tag/3vqqiUjyf/"># pandas</a>
+    
+      <a href="https://fade-color.github.io/tag/kvztIB3-U/"># 学习笔记</a>
     
   </div>
   <div class="nav">
     <div class="nav-prev">
       
         <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="Pandas-01-基本数据操作" href="https://fade-color.github.io/post/pandas-01-ji-ben-shu-ju-cao-zuo/">Pandas-01-基本数据操作</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="Pandas-01-基本数据操作" href="https://fade-color.github.io/post/pandas-01-ji-ben-shu-ju-cao-zuo/">上一篇</a>
+        <a class="nav-pc-next" title="机器学习笔记01. K-近邻算法简介" href="https://fade-color.github.io/post/ji-qi-xue-xi-bi-ji-01-k-jin-lin-suan-fa-jian-jie/">机器学习笔记01. K-近邻算法简介</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="机器学习笔记01. K-近邻算法简介" href="https://fade-color.github.io/post/ji-qi-xue-xi-bi-ji-01-k-jin-lin-suan-fa-jian-jie/">上一篇</a>
       
     </div>
     <div class="nav-next">
       
-        <a class="nav-pc-next" title="JupyterLab 显示中文字体" href="https://fade-color.github.io/post/Jupyterlab-xian-shi-zhong-wen-zi-ti/">JupyterLab 显示中文字体</a>
-        <a class="nav-mobile-next" title="JupyterLab 显示中文字体" href="https://fade-color.github.io/post/Jupyterlab-xian-shi-zhong-wen-zi-ti/">下一篇</a>
+        <a class="nav-pc-next" title="Matplotlib更改plot样式" href="https://fade-color.github.io/post/matplotlib-geng-gai-plot-yang-shi/">Matplotlib更改plot样式</a>
+        <a class="nav-mobile-next" title="Matplotlib更改plot样式" href="https://fade-color.github.io/post/matplotlib-geng-gai-plot-yang-shi/">下一篇</a>
         <i class="fa fa-chevron-right"></i>
       
     </div>

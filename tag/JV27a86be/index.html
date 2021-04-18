@@ -9,7 +9,7 @@
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#000">
 <title>七年的万事屋</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1618665520531">
+<link rel="shortcut icon" href="/favicon.ico?v=1618736589261">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -197,19 +197,19 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">7</span>
+        <span class="site-item-stat-count">8</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
     <div class="sidebar-item-box">
       <a href="">
-        <span class="site-item-stat-count">8</span>
+        <span class="site-item-stat-count">9</span>
         <span class="site-item-stat-name language" data-lan="category">分类</span>
       </a>
     </div>
     <div class="sidebar-item-box">
       <a href="/tags/">
-        <span class="site-item-stat-count">8</span>
+        <span class="site-item-stat-count">9</span>
         <span class="site-item-stat-name language" data-lan="tag">标签</span>
       </a>
     </div>
@@ -266,6 +266,12 @@
           <small class="language" data-lan="tag">标签</small>
         </h2>
       </div>
+      
+      
+      
+      
+      
+      
       
       
       
@@ -1336,6 +1342,113 @@ print(&amp;quot;准确率为：\n&amp;quot;, score)
 &lt;p&gt;项目目的是预测一个人将要签到的地方。其中给定的虚拟世界包括&lt;strong&gt;10km*10km共100 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;msup&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;km^2&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.8141079999999999em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03148em;&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;msupsub&#34;&gt;&lt;span class=&#34;vlist-t&#34;&gt;&lt;span class=&#34;vlist-r&#34;&gt;&lt;span class=&#34;vlist&#34; style=&#34;height:0.8141079999999999em;&#34;&gt;&lt;span style=&#34;top:-3.063em;margin-right:0.05em;&#34;&gt;&lt;span class=&#34;pstrut&#34; style=&#34;height:2.7em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;sizing reset-size6 size3 mtight&#34;&gt;&lt;span class=&#34;mord mtight&#34;&gt;2&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的约10w个地方&lt;/strong&gt;。对于给定的坐标集，任务是&lt;strong&gt;根据用户的位置，准确性和时间戳等预测用户下一次的签到位置&lt;/strong&gt;。数据被制作成类似于来自移动设备的位置数据。&lt;/p&gt;
 &lt;h3 id=&#34;112-数据集介绍&#34;&gt;11.2. 数据集介绍&lt;/h3&gt;
 ">机器学习笔记01. K-近邻算法简介</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://fade-color.github.io/post/pandas-01-ji-ben-shu-ju-cao-zuo/"" data-c="
+          &lt;ul&gt;
+&lt;li&gt;导入数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# 读取文件
+data = pd.read_csv(&amp;quot;./data/stock_day.csv&amp;quot;)
+
+# 删除一些无用列
+data = data.drop([&amp;quot;ma5&amp;quot;, &amp;quot;ma10&amp;quot;, &amp;quot;ma20&amp;quot;, &amp;quot;v_ma5&amp;quot;, &amp;quot;v_ma10&amp;quot;, &amp;quot;v_ma20&amp;quot;], axis=1)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210312104037221.png&#34; alt=&#34;image-20210312104037221&#34; style=&#34;zoom:50%;&#34; /&gt;
+&lt;h3 id=&#34;1-索引操作&#34;&gt;1. 索引操作&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;直接行列索引（先列后行）&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# 先列后行
+data[&amp;quot;open&amp;quot;][&amp;quot;2018-02-27&amp;quot;]  # 23.53
+
+# 不支持的操作
+# 先行后列
+data[&amp;quot;2018-02-27&amp;quot;][&amp;quot;open&amp;quot;]
+# 切片
+data[:1, :2]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用loc和iloc索引&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# loc:仅支持行列名索引
+data.loc[&amp;quot;2018-02-27&amp;quot;:&amp;quot;2018-02-14&amp;quot;, &amp;quot;open&amp;quot;:&amp;quot;close&amp;quot;]
+
+# iloc:通过下标进行索引
+data.iloc[:3, :5]  # 前3行，前5列
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用ix组合索引&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;在pandas 0.20.0版本中此方法被废弃，使用.iloc和.loc组合索引。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;获取第1-4天，[&amp;quot;open&amp;quot;, &amp;quot;close&amp;quot;, &amp;quot;high&amp;quot;, &amp;quot;low&amp;quot;]这四个指标的结果&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# 使用ix进行下标和列名组合索引
+data.ix[0:4, [&amp;quot;open&amp;quot;, &amp;quot;close&amp;quot;, &amp;quot;high&amp;quot;, &amp;quot;low&amp;quot;]]
+
+# 推荐使用loc和iloc组合
+data.loc[data.index[0:4], [&amp;quot;open&amp;quot;, &amp;quot;close&amp;quot;, &amp;quot;high&amp;quot;, &amp;quot;low&amp;quot;]]
+# 或
+data.iloc[0:4, data.columns.get_indexer([&amp;quot;open&amp;quot;, &amp;quot;close&amp;quot;, &amp;quot;high&amp;quot;, &amp;quot;low&amp;quot;])]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-赋值操作&#34;&gt;2. 赋值操作&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# 直接修改原来的值
+data[&amp;quot;close&amp;quot;] = 1
+# 或者
+data.close = 1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;3-排序&#34;&gt;3. 排序&lt;/h3&gt;
+&lt;h4 id=&#34;31-dataframe排序&#34;&gt;3.1. DataFrame排序&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;使用&lt;code&gt;dataframe.sort_values(by=,ascending=)&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;指定单个键或多个键进行排序&lt;/li&gt;
+&lt;li&gt;参数：
+&lt;ul&gt;
+&lt;li&gt;by：指定排序参考的键&lt;/li&gt;
+&lt;li&gt;ascending：默认升序
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ascending=True&lt;/code&gt;：升序&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ascending=False&lt;/code&gt;：降序&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# 根据开盘价降序排序
+data.sort_values(by=&amp;quot;open&amp;quot;, ascending=False).head()
+
+# 根据开盘价和最高价升序排序
+data.sort_values(by=[&amp;quot;open&amp;quot;, &amp;quot;high&amp;quot;], ascending=True).head()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用&lt;code&gt;dataframe.sort_index()&lt;/code&gt;以索引进行排序&lt;/p&gt;
+&lt;p&gt;默认升序，同样可以指定&lt;code&gt;ascending=False&lt;/code&gt;来进行降序排序&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# 以行（日期）进行升序排序
+data.sort_index()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;32-series排序&#34;&gt;3.2. Series排序&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;使用&lt;code&gt;series.sort_values(ascending=)&lt;/code&gt;以列排序&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;data[&amp;quot;high&amp;quot;].sort_values().head()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用&lt;code&gt;series.sort_index(ascending=)&lt;/code&gt;以索引排序&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;data[&amp;quot;high&amp;quot;].sort_index(ascending=False).head()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+">Pandas-01-基本数据操作</a>
       </div>
       
       <div class="item">
