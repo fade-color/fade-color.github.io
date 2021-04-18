@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://fade-color.github.io</id>
     <title>七年的万事屋</title>
-    <updated>2021-04-18T10:55:48.557Z</updated>
+    <updated>2021-04-18T11:06:23.725Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://fade-color.github.io"/>
     <link rel="self" href="https://fade-color.github.io/atom.xml"/>
@@ -1005,9 +1005,9 @@ stock_rise.cumsum().plot()
 # 需要调用show才能显示
 plt.show()
 </code></pre>
-<img src="/Users/qinian/Library/Application Support/typora-user-images/image-20210313123232977.png" alt="image-20210313123232977" style="zoom:50%;" />
 </li>
 </ul>
+<figure data-type="image" tabindex="2"><img src="https://i.loli.net/2021/04/18/GYpUaBrLiuNX2Ef.png" alt="image-20210418190538126" loading="lazy"></figure>
 <h3 id="4-自定义运算">4. 自定义运算</h3>
 <ul>
 <li>
