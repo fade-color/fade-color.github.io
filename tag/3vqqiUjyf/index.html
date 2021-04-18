@@ -9,14 +9,14 @@
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#000">
 <title>七年的万事屋</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1618744547730">
+<link rel="shortcut icon" href="/favicon.ico?v=1618745934662">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
   href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
   rel="stylesheet" type="text/css">
 
-<link href="/media/hljs/styles/default.css"
+<link href="/media/hljs/styles/atom-one-light.css"
   rel="stylesheet">
 
 <link rel="stylesheet" href="/styles/main.css">
@@ -222,11 +222,18 @@
       <div class="social-item">
         
           
-            <a href="fade-color">
-              <i class="fa fa-wechat" title="微信"></i>
+            <a href="https://github.com/fade-color">
+              <i class="fa fa-github-alt" title="七年"></i>
             </a>
           
         
+        
+          
+            <a class="social-img" href="#">
+              <img src="/media/images/custom-array-imgSocials-1618745934371-socialImg.jpg" />
+              <i class="fa fa-wechat" title="微信" ></i>
+            </a>
+          
         
       </div>
     </div>
@@ -1376,7 +1383,8 @@ data[data[&amp;quot;open&amp;quot;] &amp;gt; 23].head()
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;多个逻辑判断&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;data[(data[&amp;quot;open&amp;quot;]&amp;gt;23) &amp;amp; (data[&amp;quot;open&amp;quot;] &amp;lt; 24)].head()
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# 要加括号将 &amp;amp; 两边的判断条件括起来
+data[(data[&amp;quot;open&amp;quot;] &amp;gt; 23) &amp;amp; (data[&amp;quot;open&amp;quot;] &amp;lt; 24)].head()
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -1388,7 +1396,7 @@ data[data[&amp;quot;open&amp;quot;] &amp;gt; 23].head()
 &lt;li&gt;expr：查询字符串&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;通过query使刚才的过程更加方便简洁：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;data.query(&amp;quot;open&amp;gt;23 &amp;amp; open&amp;lt;24&amp;quot;).head()
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;data.query(&amp;quot;open &amp;gt; 23 &amp;amp; open &amp;lt; 24&amp;quot;).head()
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/li&gt;
 &lt;li&gt;

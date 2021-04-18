@@ -2125,29 +2125,29 @@ body {
       transition-duration: 59s;
       transition-timing-function: cubic-bezier(.34,0,.84,1);
     }.markdownIt-TOC a {
-      color: #eee;
-      border-bottom-color: #eee;
+      color: #495057;
+      border-bottom-color: #495057;
     }.markdownIt-TOC a:hover {
-      color: #fff;
-      border-bottom-color: #fff;
+      color: #ff6b6b;
+      border-bottom-color: #ff6b6b;
     }.active-current > a {
-      color: #fc6423 !important;
-      border-bottom-color: #fc6423 !important;
+      color: #228be6 !important;
+      border-bottom-color: #228be6 !important;
     }
     .sidebar-title-active {
-      color: #fc6423 !important;
-      border-bottom-color: #fc6423 !important;
+      color: #228be6;
+      border-bottom-color: #228be6;
     }
     .sidebar-title-item:hover {
-      color: #fc6423 !important;
+      color: #228be6 !important;
     }
     .active-show > a {
-      color: #fc6423;
-      border-bottom-color: #fc6423;
+      color: #228be6;
+      border-bottom-color: #228be6;
     }
     .active-hidden > a {
-      color: #fc6423;
-      border-bottom-color: #fc6423;
+      color: #228be6;
+      border-bottom-color: #228be6;
     }.bg-color {
       background-color: #fffffffe;
     }
