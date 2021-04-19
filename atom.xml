@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://fade-color.github.io</id>
     <title>七年的万事屋</title>
-    <updated>2021-04-19T13:06:54.313Z</updated>
+    <updated>2021-04-19T13:09:27.343Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://fade-color.github.io"/>
     <link rel="self" href="https://fade-color.github.io/atom.xml"/>
@@ -886,10 +886,10 @@ result = pd.merge(left, right, how=&quot;outer&quot;, on=[&quot;key1&quot;, &quo
 <figure data-type="image" tabindex="5"><img src="https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210313204004267.png" alt="image-20210313204004267" loading="lazy"></figure>
 </li>
 </ul>
-<h3 id="3-小结">3. 小结</h3>
+<h3 id="3-总结">3. 总结</h3>
 <ul>
-<li>pd.concat([&quot;数据1&quot;, &quot;数据2&quot;], axis=)【知道】</li>
-<li>pd.merge(left, right, how=, on=)【知道】
+<li>pd.concat([&quot;数据1&quot;, &quot;数据2&quot;], axis=)</li>
+<li>pd.merge(left, right, how=, on=)
 <ul>
 <li>how -- 以何种方式连接</li>
 <li>on -- 连接的键的依据是哪些</li>
