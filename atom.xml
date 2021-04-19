@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://fade-color.github.io</id>
     <title>七年的万事屋</title>
-    <updated>2021-04-19T07:46:17.513Z</updated>
+    <updated>2021-04-19T13:06:54.313Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://fade-color.github.io"/>
     <link rel="self" href="https://fade-color.github.io/atom.xml"/>
@@ -779,6 +779,550 @@ print(&quot;准确率为：\n&quot;, score)
 <h3 id="111-项目描述">11.1. 项目描述</h3>
 <p>项目目的是预测一个人将要签到的地方。其中给定的虚拟世界包括<strong>10km*10km共100 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi><msup><mi>m</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">km^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mord"><span class="mord mathdefault">m</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> 的约10w个地方</strong>。对于给定的坐标集，任务是<strong>根据用户的位置，准确性和时间戳等预测用户下一次的签到位置</strong>。数据被制作成类似于来自移动设备的位置数据。</p>
 <h3 id="112-数据集介绍">11.2. 数据集介绍</h3>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Pandas-06-数据合并]]></title>
+        <id>https://fade-color.github.io/post/pandas-06-shu-ju-he-bing/</id>
+        <link href="https://fade-color.github.io/post/pandas-06-shu-ju-he-bing/">
+        </link>
+        <updated>2021-04-07T07:06:02.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="1-pdconcat实现数据合并">1. pd.concat实现数据合并</h3>
+<ul>
+<li>
+<p>pd.concat([data1, data2], axis=1)</p>
+<ul>
+<li>按照行或列进行合并，axis=0为列索引，axis=1为行索引</li>
+</ul>
+<p>比如将刚才处理好的one-hot编码与原数据合并</p>
+<pre><code class="language-python"># 按照行索引进行合并
+pd.concat([data, dummies], axis=1)
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210313200004169.png" alt="image-20210313200004169" loading="lazy"></figure>
+</li>
+</ul>
+<h3 id="2-pdmerge">2. pd.merge</h3>
+<ul>
+<li>
+<p>pd.merge(left, right, how='inner', on=None)</p>
+<ul>
+<li>可以指定按照两组共同的数据的共同键值对合并或者左右各自</li>
+<li><code>left</code>：DataFrame</li>
+<li><code>right</code>：另一个DataFrame</li>
+<li><code>on</code>：指定的共同键</li>
+<li><code>how</code>：按照什么方式进行连接</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Merge method</th>
+<th style="text-align:center">SQL Jion Name</th>
+<th style="text-align:center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>left</code></td>
+<td style="text-align:center"><code>LEFT OUTER JION</code></td>
+<td style="text-align:center">左连接</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>right</code></td>
+<td style="text-align:center"><code>RIGHT OUTER JION</code></td>
+<td style="text-align:center">右连接</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>inner</code></td>
+<td style="text-align:center"><code>INNER JION</code></td>
+<td style="text-align:center">内连接</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>outer</code></td>
+<td style="text-align:center"><code>FULL OUTER JION</code></td>
+<td style="text-align:center">外连接</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">left = pd.DataFrame({
+    &quot;A&quot;: [&quot;A0&quot;, &quot;A1&quot;, &quot;A2&quot;, &quot;A3&quot;],
+    &quot;B&quot;: [&quot;B0&quot;, &quot;B1&quot;, &quot;B2&quot;, &quot;B3&quot;],
+    &quot;key1&quot;: [&quot;K0&quot;, &quot;K0&quot;, &quot;K1&quot;, &quot;K2&quot;],
+    &quot;key2&quot;: [&quot;K0&quot;, &quot;K1&quot;, &quot;K0&quot;, &quot;K1&quot;]
+})
+right = pd.DataFrame({
+    &quot;C&quot;: [&quot;C0&quot;, &quot;C1&quot;, &quot;C2&quot;, &quot;C3&quot;],
+    &quot;D&quot;: [&quot;D0&quot;, &quot;D1&quot;, &quot;D2&quot;, &quot;D3&quot;],
+    &quot;key1&quot;: [&quot;K0&quot;, &quot;K1&quot;, &quot;K1&quot;, &quot;K2&quot;],
+    &quot;key2&quot;: [&quot;K0&quot;, &quot;K0&quot;, &quot;K0&quot;, &quot;K0&quot;]
+})
+</code></pre>
+</li>
+<li>
+<p>默认为内连接：</p>
+<pre><code class="language-python"># 默认内连接
+result = pd.merge(left, right, on=[&quot;key1&quot;, &quot;key2&quot;])
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210313203441190.png" alt="image-20210313203441190" loading="lazy"></figure>
+</li>
+<li>
+<p>左连接</p>
+<pre><code class="language-python"># 左连接
+result = pd.merge(left, right, how=&quot;left&quot;, on=[&quot;key1&quot;, &quot;key2&quot;])
+</code></pre>
+<figure data-type="image" tabindex="3"><img src="https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210313203723482.png" alt="image-20210313203723482" loading="lazy"></figure>
+</li>
+<li>
+<p>右连接</p>
+<pre><code class="language-python"># 右连接
+result = pd.merge(left, right, how=&quot;right&quot;, on=[&quot;key1&quot;, &quot;key2&quot;])
+</code></pre>
+<figure data-type="image" tabindex="4"><img src="https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210313203845121.png" alt="image-20210313203845121" loading="lazy"></figure>
+</li>
+<li>
+<p>外连接</p>
+<pre><code class="language-python"># 外连接
+result = pd.merge(left, right, how=&quot;outer&quot;, on=[&quot;key1&quot;, &quot;key2&quot;])
+</code></pre>
+<figure data-type="image" tabindex="5"><img src="https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210313204004267.png" alt="image-20210313204004267" loading="lazy"></figure>
+</li>
+</ul>
+<h3 id="3-小结">3. 小结</h3>
+<ul>
+<li>pd.concat([&quot;数据1&quot;, &quot;数据2&quot;], axis=)【知道】</li>
+<li>pd.merge(left, right, how=, on=)【知道】
+<ul>
+<li>how -- 以何种方式连接</li>
+<li>on -- 连接的键的依据是哪些</li>
+</ul>
+</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Pandas-05-数据离散化]]></title>
+        <id>https://fade-color.github.io/post/pandas-05-shu-ju-chi-san-hua/</id>
+        <link href="https://fade-color.github.io/post/pandas-05-shu-ju-chi-san-hua/">
+        </link>
+        <updated>2021-04-07T01:04:56.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="1-为什么要离散化">1. 为什么要离散化</h3>
+<p>连续属性离散化的目的是为了简化数据结构，<strong>数据结构离散化技术可以用来减少给定连续属性值的个数</strong>。离散化方法经常作为数据挖掘的工具。</p>
+<h3 id="2-什么是数据的离散化">2. 什么是数据的离散化</h3>
+<p><strong>连续属性的离散化就是在连续属性的值域上，将值域划分为若干个离散的区间，最后用不同的符号或整数、值代表落在每个子区间中的属性值。</strong></p>
+<h3 id="3-股票的涨跌幅离散化">3. 股票的涨跌幅离散化</h3>
+<p>对股票每日的&quot;p_change&quot;进行离散化</p>
+<h4 id="31-读取股票数据">3.1. 读取股票数据</h4>
+<pre><code class="language-python">data = pd.read_csv(&quot;./data/stock_day.csv&quot;)
+p_change = data[&quot;p_change&quot;]
+
+2018-02-27    2.68
+2018-02-26    3.02
+2018-02-23    2.42
+2018-02-22    1.64
+2018-02-14    2.05
+              ... 
+2015-03-06    8.51
+2015-03-05    2.02
+2015-03-04    1.57
+2015-03-03    1.44
+2015-03-02    2.62
+Name: p_change, Length: 643, dtype: float64
+</code></pre>
+<h4 id="32-将股票涨跌幅数据进行分组">3.2. 将股票涨跌幅数据进行分组</h4>
+<ul>
+<li>pd.qcut(data, q):
+<ul>
+<li>对数据进行分组，q为组数，一般会与value_counts搭配使用，统计每组的个数</li>
+</ul>
+</li>
+<li>series.values_counts()：统计每组个数</li>
+</ul>
+<pre><code class="language-python"># 自行分组
+qcut = pd.qcut(p_change, 10)
+# 计算分到每组数据个数
+qcut.value_counts()
+
+(5.27, 10.03]                    65
+(0.26, 0.94]                     65
+(-0.462, 0.26]                   65
+(-10.030999999999999, -4.836]    65
+(2.938, 5.27]                    64
+(1.738, 2.938]                   64
+(-1.352, -0.462]                 64
+(-2.444, -1.352]                 64
+(-4.836, -2.444]                 64
+(0.94, 1.738]                    63
+Name: p_change, dtype: int64
+</code></pre>
+<p>自定义区间分组：</p>
+<ul>
+<li>pd.cut(data, bins)：
+<ul>
+<li>data：要分组的数据</li>
+<li>bins：列表，自定义的区间列表：[-2, -1, 0, 1, 2]</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-python"># 自己指定分区区间
+bins = [-100, -7, -5, -3, 0, 3, 5, 7, 100]
+p_cut = pd.cut(p_change, bins)
+</code></pre>
+<h4 id="33-股票涨跌幅分组数据变成one-hot编码">3.3. 股票涨跌幅分组数据变成one-hot编码</h4>
+<ul>
+<li>
+<p><strong>什么是one-hot编码</strong></p>
+<p>把每个类别生成一个布尔列，这些列中只有一列可以为这个样本取值为1。其又被称为热编码。</p>
+<p>把下图中左边的表格转化为右边形式表示：</p>
+</li>
+</ul>
+<figure data-type="image" tabindex="1"><img src="https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210313193921906.png" alt="image-20210313193921906" loading="lazy"></figure>
+<ul>
+<li>
+<p>pandas.get_dummies(data, prefix=None)</p>
+<ul>
+<li>data：array-like，Series，or DataFrame</li>
+<li>prefix：分组名字前缀</li>
+</ul>
+<pre><code class="language-python"># 得出one-hot编码矩阵
+dummies = pd.get_dummies(p_cut, prefix=&quot;rise&quot;)
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210313194636486.png" alt="image-20210313194636486" loading="lazy"></figure>
+</li>
+</ul>
+<h3 id="4-总结">4. 总结</h3>
+<ul>
+<li>数据离散化
+<ul>
+<li>可以用来减少给定连续属性值的个数</li>
+<li>在连续属性的值域上，将值域划分为若干个离散的区间，最后用不同的符号或整数值代表落在每个子区间中的属性值。</li>
+</ul>
+</li>
+<li>qcut、cut实现数据分组
+<ul>
+<li>qcut：大致分为数量相同的几组</li>
+<li>cut：自定义分组区间</li>
+</ul>
+</li>
+<li>get_dummies实现哑变量矩阵</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Pandas-04-缺失值处理]]></title>
+        <id>https://fade-color.github.io/post/pandas-04-que-shi-zhi-chu-li/</id>
+        <link href="https://fade-color.github.io/post/pandas-04-que-shi-zhi-chu-li/">
+        </link>
+        <updated>2021-04-06T15:03:17.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="1-如何处理nan">1. 如何处理NaN</h3>
+<ul>
+<li>
+<p>获取缺失值的标记方式（NaN或其他标记方式）</p>
+<ul>
+<li>
+<p>如果缺失值的标记方式是NaN</p>
+<ul>
+<li>
+<p>判断数据是否包含NaN：</p>
+<ul>
+<li>pd.isnull(df)</li>
+<li>pd.notnull(df)</li>
+</ul>
+</li>
+<li>
+<p>存在缺失值NaN：</p>
+<ol>
+<li>
+<p>删除存在的缺失值：</p>
+<p>dropna(axis='rows')</p>
+<blockquote>
+<p>注：不会修改原数据，而是返回删除后的数据</p>
+</blockquote>
+</li>
+<li>
+<p>替换缺失值：</p>
+<p>fillna(value, inplace=True)</p>
+<ul>
+<li>value：要替换为的值</li>
+<li>inplace：True：会直接修改原数据，False：返回修改后的数据</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>如果缺失值没有使用NaN标记，比如使用 “ ? ”</p>
+<ul>
+<li>先替换&quot;?&quot;为np.nan，然后继续处理</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-案例电影数据的缺失值处理">2. 案例：电影数据的缺失值处理</h3>
+<ul>
+<li>
+<p>读取电影文件获取数据</p>
+<pre><code class="language-python">movie = pd.read_csv(&quot;./data/IMDB-Movie-Data.csv&quot;)
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210313170709423.png" alt="image-20210313170709423" loading="lazy"></figure>
+</li>
+</ul>
+<h4 id="21-判断缺失值是否存在">2.1. 判断缺失值是否存在</h4>
+<pre><code class="language-python">pd.notnull(movie)
+# df直接调用notnull也可
+movie.notnull()
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210313170954865.png" alt="image-20210313170954865" loading="lazy"></figure>
+<p>可以用np.all或np.any来综合判断数据中是否有缺失值</p>
+<pre><code class="language-python">np.all(pd.notnull(movie))  # 如果全为True，则返回True，说明没有缺失值
+# 或
+np.all(movie.notnull())  # 如果全为True，则返回True，说明没有缺失值
+
+np.any(pd.isnull(movie))  # 如果存在True，则返回True，说明有缺失值
+# 或
+np.any(movie.isnull())  # 如果存在True，则返回True，说明有缺失值
+</code></pre>
+<h4 id="22-存在缺失值nan并且是npnan">2.2. 存在缺失值NaN，并且是np.nan</h4>
+<ol>
+<li>
+<p>删除</p>
+<p>pandas删除缺失值，使用dropna的前提是缺失值的类型必须是np.nan</p>
+<pre><code class="language-python"># 不改变原数据，所以用新变量接收
+droped_movie = movie.dropna()
+</code></pre>
+</li>
+<li>
+<p>替换</p>
+<p>替换所有缺失值</p>
+<pre><code class="language-python">for col in movie.columns:
+    if np.any(movie[col].isnull()):  # 如果存在缺失值
+        movie[col].fillna(movie[col].mean(), inplace=True)  # 用该列的平均值填充
+</code></pre>
+</li>
+</ol>
+<h4 id="23-缺失值不是nan有默认标记的">2.3. 缺失值不是NaN，有默认标记的</h4>
+<p>以缺失值为 &quot;?&quot; 为例：</p>
+<pre><code class="language-python">wis = pd.read_csv(&quot;https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/breast-cancer-wisconsin.data&quot;)
+</code></pre>
+<p>如果报URLError提示SSL证书错误：</p>
+<pre><code class="language-python"># 全局取消证书验证
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
+</code></pre>
+<p><strong>处理思路：</strong></p>
+<ol>
+<li>
+<p>先替换&quot;?&quot;为np.nan</p>
+<p>df.replace(to_replace=, value=)</p>
+<ul>
+<li>to_replace：替换前的值</li>
+<li>value：替换后的值</li>
+</ul>
+<pre><code class="language-python"># 把其他标记的缺失值，替换成np.nan
+wis.replace(to_replace=&quot;?&quot;, value=np.nan)
+</code></pre>
+</li>
+<li>
+<p>再进行缺失值的处理</p>
+<pre><code class="language-python"># 删除
+wis = wis.dropna()
+</code></pre>
+</li>
+</ol>
+<h3 id="3-总结">3. 总结</h3>
+<ul>
+<li>
+<p>isnull、notnull判断是否存在缺失值【知道】</p>
+<ul>
+<li>
+<p><code>np.all(movie.notnull()) # 如果全为True，则返回True，说明没有缺失值</code></p>
+<p><code>np.all(movie.notnull()) # 如果全为True，则返回True，说明没有缺失值</code></p>
+</li>
+<li>
+<p><code>np.any(movie.isnull()) # 如果存在True，则返回True，说明有缺失值</code></p>
+<p><code>np.any(movie.isnull()) # 如果存在True，则返回True，说明有缺失值</code></p>
+</li>
+</ul>
+</li>
+<li>
+<p>dropna删除np.nan标记的缺失值【知道】</p>
+<ul>
+<li><code>movie.dropna()</code></li>
+</ul>
+</li>
+<li>
+<p>fillna填充缺失值【知道】</p>
+<ul>
+<li><code>movie[col].fillna(movie[col].mean(), inplace=True) # 用该列的平均值填充</code></li>
+</ul>
+</li>
+<li>
+<p>replace替换某些具体值【知道】</p>
+<ul>
+<li><code>wis.replace(to_replace=&quot;?&quot;, value=np.nan)</code></li>
+</ul>
+</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Pandas-03-文件读取与存储]]></title>
+        <id>https://fade-color.github.io/post/pandas-03-wen-jian-du-qu-yu-cun-chu/</id>
+        <link href="https://fade-color.github.io/post/pandas-03-wen-jian-du-qu-yu-cun-chu/">
+        </link>
+        <updated>2021-04-06T13:01:57.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="1-csv">1. CSV</h3>
+<h4 id="11-read_csv">1.1. read_csv</h4>
+<ul>
+<li>
+<p>pandas.read_csv(filepath_or_buffer, sep=',')</p>
+<ul>
+<li>filepath_or_buffer：文件路径</li>
+<li>usecols：列表，指定读取的列名</li>
+</ul>
+<pre><code class="language-python"># 读取文件，并指定只获取open和close这两列
+data = pd.read_csv(&quot;./data/stock_day.csv&quot;, usecols=['open', 'close'])
+</code></pre>
+</li>
+</ul>
+<h4 id="12-to_csv">1.2. to_csv</h4>
+<ul>
+<li>
+<p>DataFrame.to_csv(path_or_buf=None, sep=',', columns=None, header=True, index=True, mode='w', encoding=None)</p>
+<ul>
+<li>path_or_buf：文件路径</li>
+<li>sep：分隔符，默认用','分开</li>
+<li>columns：选择需要的列索引</li>
+<li>header：bool或字符串列表，是否保存列名，默认为 True ，保存</li>
+<li>index：是否保存索引，默认为 True ，保存</li>
+<li>mode：'w' 重写，'a' 追加</li>
+</ul>
+</li>
+<li>
+<p>举例：保存读取出来的股票数据</p>
+<ul>
+<li>保存'open'列的数据，然后读取查看结果</li>
+</ul>
+<pre><code class="language-python">data[:10].to_csv(&quot;./data/test.csv&quot;, columns=[&quot;open&quot;], index=&quot;date&quot;)
+</code></pre>
+<pre><code class="language-python">	date				open
+0	2015-03-02	12.25
+1	2015-03-03	12.52
+2	2015-03-04	12.80
+3	2015-03-05	12.88
+4	2015-03-06	13.17
+...
+</code></pre>
+<p>可以发现index单独成为了一列数据。如果需要删除，可以指定index参数为False</p>
+<pre><code class="language-python">data[:10].to_csv(&quot;./data/test2.csv&quot;, columns=[&quot;open&quot;], index=False)
+
+	open
+0	12.25
+1	12.52
+2	12.80
+3	12.88
+...
+</code></pre>
+</li>
+</ul>
+<h3 id="2-hdf5">2. HDF5</h3>
+<h4 id="21-read_hdf与to_hdf">2.1. read_hdf()与to_hdf()</h4>
+<p>HDF5文件的读取和存储需要<strong>指定一个键，值为要存储的DataFrame</strong>。</p>
+<ul>
+<li>
+<p>pandas.read_hdf(path_or_buf, key=None, **kwargs)</p>
+<p>从h5文件中读取数据</p>
+<ul>
+<li>path_or_buf：文件路径</li>
+<li>key：读取的键</li>
+</ul>
+</li>
+<li>
+<p>DataFrame.to_hdf(path_or_buf, key, **kwargs)</p>
+</li>
+</ul>
+<h4 id="22-案例">2.2. 案例</h4>
+<ul>
+<li>
+<p>读取文件</p>
+<pre><code class="language-python">pd.read_hdf(&quot;./data/day_close.h5&quot;)
+</code></pre>
+</li>
+<li>
+<p>存储文件</p>
+<pre><code class="language-python">day_close.to_hdf(&quot;./data/day_close.h5&quot;, key=&quot;day_close&quot;)
+</code></pre>
+<p>再次读取的时候需要指定键的名字</p>
+<pre><code class="language-python">pd.read_hdf(&quot;./data/day_close.h5&quot;, key=&quot;day_close&quot;)
+</code></pre>
+<p><strong>注意：优先选择使用HDF5文件存储</strong></p>
+<ul>
+<li>HDF5在存储时支持压缩，<strong>使用的方式是blosc</strong>，这个是<strong>速度最快也是pandas默认支持的</strong></li>
+<li>使用压缩可以<strong>提高磁盘利用率，节省空间</strong></li>
+<li>HDF5还是跨平台的，可以轻松迁移到hadoop上</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-json">3. JSON</h3>
+<h4 id="31-read_json">3.1. read_json()</h4>
+<ul>
+<li>
+<p>pandas.read_json(path_or_buf=None, orient=None, typ='frame', lines=False)</p>
+<ul>
+<li>
+<p>作用：将JSON格式转换成默认的Pandas DataFrame格式</p>
+</li>
+<li>
+<p>orient：string, Indication of expected JSON string format.字符串，表示预期的JSON字符串格式。</p>
+<ul>
+<li>
+<p>'split': dict like {index -&gt; [index], columns -&gt; [columns], data -&gt; [data]}</p>
+<p>split将索引总结到索引，列名到列名，数据到数据。</p>
+</li>
+<li>
+<p>'records': list like [{column -&gt; value}, ..., {column -&gt; value}]</p>
+<p>records以<code>columns:values</code>的形式输出</p>
+</li>
+<li>
+<p><strong>'index': dict like {column -&gt; {index -&gt; value}}</strong>, <strong>默认输出该格式</strong></p>
+<p>index以<code>column:{index:value}</code>的形式输出</p>
+</li>
+<li>
+<p>'values': just the values array</p>
+<p>values直接输出值</p>
+</li>
+</ul>
+</li>
+<li>
+<p>lines: boolean, default False</p>
+<p>按照每行读取json对象</p>
+</li>
+<li>
+<p>typ: default 'frame'，指定转换成的对象类型series或者dataframe</p>
+</li>
+</ul>
+</li>
+<li>
+<p>读取</p>
+<pre><code class="language-python">read = pd.read_json(&quot;./data/Sarcasm_Headlines_Dataset.json&quot;, orient=&quot;records&quot;, lines=True)
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210313162157386.png" alt="image-20210313162157386" loading="lazy"></figure>
+</li>
+</ul>
+<h4 id="32-to_json">3.2. to_json()</h4>
+<ul>
+<li>
+<p>DataFrame.to_json(path_or_buf=None, orient=None, lines=False)</p>
+<ul>
+<li>将Pandas对象存储为json格式</li>
+</ul>
+</li>
+<li>
+<p>案例</p>
+<pre><code class="language-python">read.to_json(&quot;./data/test.json&quot;, orient='records')
+</code></pre>
+</li>
+</ul>
 ]]></content>
     </entry>
     <entry>
@@ -1580,359 +2124,6 @@ a[(a &lt; 5) | (a % 2 == 0)]
 </code></pre>
 </li>
 </ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Python装饰器总结]]></title>
-        <id>https://fade-color.github.io/post/python-zhuang-shi-qi-zong-jie/</id>
-        <link href="https://fade-color.github.io/post/python-zhuang-shi-qi-zong-jie/">
-        </link>
-        <updated>2021-03-16T13:00:30.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="装饰器">装饰器</h3>
-<pre><code class="language-python"># --------------- 装饰器 --------------- #
-def decorator1(func):  # 传入被装饰的函数
-    # 嵌套内函数可以看做被装饰的函数
-    def inner():
-        print(&quot;-------- inner --------&quot;)
-        func()
-        print(&quot;-----------------------&quot;)
-
-    return inner
-
-
-@decorator1
-def func1():
-    print(&quot;This is func1...&quot;)
-
-
-func1()
-print()
-</code></pre>
-<p>打印结果：</p>
-<pre><code>-------- inner --------
-This is func1...
------------------------
-</code></pre>
-<h3 id="被装饰的函数带参数的装饰器">被装饰的函数带参数的装饰器</h3>
-<pre><code class="language-python"># --------------- 被装饰的函数带参数的装饰器 --------------- #
-def decorator2(func):  # 传入被装饰的函数
-    # 嵌套内函数可以看做被装饰的函数，所以被装饰函数的参数要写在inner的形参列表里，调用被装饰的函数时传入
-    def inner(arg):
-        print(&quot;-------- inner --------&quot;)
-        func(arg)
-        print(&quot;-----------------------&quot;)
-
-    return inner
-
-
-@decorator2
-def func2(arg):
-    print(f&quot;This is func2...arg:{arg}&quot;)
-
-
-func2(&quot;hello&quot;)
-print()
-</code></pre>
-<p>打印结果：</p>
-<pre><code>-------- inner --------
-This is func2...arg:hello
------------------------
-</code></pre>
-<h3 id="带返回值的函数的装饰器">带返回值的函数的装饰器</h3>
-<pre><code class="language-python"># --------------- 带返回值函数的装饰器 --------------- #
-def decorator3(func):  # 传入被装饰的函数
-    # 嵌套内函数可以看做被装饰的函数，所以被装饰函数的参数要写在inner的形参列表里，调用被装饰的函数时传入
-    def inner(arg):
-        print(&quot;-------- inner --------&quot;)
-        str_ = func(arg)
-        print(&quot;-----------------------&quot;)
-        return str_
-
-    return inner
-
-
-@decorator3
-def func3(arg):
-    return f&quot;This is func3...arg:{arg}&quot;
-
-
-print(func3(&quot;hello&quot;), &quot;\n&quot;)
-</code></pre>
-<p>打印结果：</p>
-<pre><code>-------- inner --------
------------------------
-This is func3...arg:hello 
-</code></pre>
-<h3 id="带参数的装饰器">带参数的装饰器</h3>
-<pre><code class="language-python"># --------------- 带参数的装饰器 --------------- #
-def decorator4(deco_arg):  # 带参数的装饰器再嵌套一层函数，传入装饰器的参数
-    def outer(func):  # 传入被装饰的函数
-        # 嵌套内函数可以看做被装饰的函数，所以被装饰函数的参数要写在inner的形参列表里，调用被装饰的函数时传入
-        def inner(arg):  # 被装饰的函数的参数
-            print(&quot;-------- inner --------&quot;)
-            print(&quot;decorator_arg:&quot;, deco_arg)
-            func(arg)
-            print(&quot;-----------------------&quot;)
-
-        return inner
-
-    return outer
-
-
-# 括号表示函数的调用，可以理解为此时调用了decorator4函数，此函数返回一个真正要用的装饰器outer
-@decorator4(&quot;deco_arg&quot;)
-def func4(arg):
-    print(f&quot;This is func4...arg:{arg}&quot;)
-
-
-func4(&quot;hello&quot;)
-print()
-</code></pre>
-<p>打印结果：</p>
-<pre><code>-------- inner --------
-decorator_arg: deco_arg
-This is func4...arg:hello
------------------------
-</code></pre>
-<h3 id="多个装饰器">多个装饰器</h3>
-<pre><code class="language-python"># --------------- 多个装饰器 --------------- #
-def decorator5(func):
-    print(&quot;This is decorator5...&quot;)
-
-    def inner(arg):  # 被装饰的函数inner及其参数
-        print(&quot;----- decorator5 inner -----&quot;)
-        func(arg)  # 此时调用的是inner(arg)
-        print(&quot;----------------------------&quot;)
-
-    return inner
-
-
-def decorator6(func):
-    print(&quot;This is decorator6...&quot;)
-
-    def inner(arg):  # 被装饰的函数func4及其参数
-        print(&quot;----- decorator6 inner -----&quot;)
-        func(arg)  # 调用func5
-        print(&quot;----------------------------&quot;)
-
-    return inner
-
-
-@decorator5
-@decorator6
-def func5(arg):
-    print(f&quot;This is func5... arg:{arg}&quot;)
-
-
-func5(&quot;hello&quot;)
-
-# 等同于
-# func4 = decorator4(decorator5(func4))
-# func4(&quot;hello&quot;)
-</code></pre>
-<p>打印结果：</p>
-<pre><code>This is decorator6...
-This is decorator5...
------ decorator5 inner -----
------ decorator6 inner -----
-This is func5... arg:hello
-----------------------------
-----------------------------
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Python的解包]]></title>
-        <id>https://fade-color.github.io/post/python-de-jie-bao/</id>
-        <link href="https://fade-color.github.io/post/python-de-jie-bao/">
-        </link>
-        <updated>2021-03-11T12:36:46.000Z</updated>
-        <content type="html"><![CDATA[<h4 id="元组解包">元组解包</h4>
-<pre><code class="language-python">a, b, c = (1, 2, 3)
-# a:1 b:2 c:3
-</code></pre>
-<h4 id="字符串解包">字符串解包</h4>
-<pre><code class="language-python">a, b, c = &quot;xyz&quot;
-# a:x b:y c:z
-</code></pre>
-<h4 id="字典解包">字典解包</h4>
-<p>字典解包后，只会把字典的key取出来，value则丢掉了。</p>
-<pre><code class="language-python">a, b, c = {&quot;a&quot;:1, &quot;b&quot;:2, &quot;c&quot;:3}
-# a:'a' b:'b' c:'c'
-</code></pre>
-<h4 id="等号左右元素不等时的解包">等号左右元素不等时的解包</h4>
-<p>在 Python2 中，如果等号左边变量的个数不等于右边可迭代对象中元素的个数，是不允许解包的。但在 <strong>Python3</strong> 可以这么做了。这个特性可以在 PEP 3132 中看到。</p>
-<p>这种语法就是在某个变量面前加一个星号，而且这个星号可以放在任意变量，每个变量都分配一个元素后，剩下的元素都分配给这个带星号的变量。</p>
-<pre><code class="language-python">a, b, *c = [1, 2, 3, 4]
-# a:1 b:2 c:[3, 4]
-
-# *号可以在任意位置
-a, *b, c = [1, 2, 3, 4]
-# a:1 b:[2, 3] c:4
-</code></pre>
-<h4 id="函数调用时的解包">函数调用时的解包</h4>
-<ul>
-<li>
-<p>元组，列表，字符串等传入函数时的解包：</p>
-<pre><code class="language-python">def func(a, b, c):
-    print(a, b, c)
-
-func(*[1, 2, 3])
-func(*(1, 2, 3))
-func(*&quot;123&quot;)
-# 以上三条语句都等同于
-func(1, 2, 3)
-</code></pre>
-</li>
-<li>
-<p>字典会以key=value的格式解包传入函数：</p>
-<pre><code class="language-python">func(**{&quot;a&quot;: 1, &quot;b&quot;: 2, &quot;c&quot;: 3})
-# 等同于
-func(a=1, b=2, c=3)
-</code></pre>
-<blockquote>
-<p>字典的key必须和形参名保持一致，否则会报错</p>
-</blockquote>
-</li>
-<li>
-<p>从<strong>Python3.5</strong>开始，在函数调用中可以有任意多个解包操作：</p>
-<pre><code class="language-python">func(*(1,), *[2], **{&quot;c&quot;: 3})
-</code></pre>
-</li>
-</ul>
-<h4 id="表达式中的解包">表达式中的解包</h4>
-<pre><code class="language-python">*range(4), 4
-# (0, 1, 2, 3, 4)
-
-[*range(4), 4]
-# [0, 1, 2, 3, 4]
-
-{*range(4), 4}
-# {0, 1, 2, 3, 4}
-
-{&quot;x&quot;: 1, &quot;y&quot;: 2, **{&quot;z&quot;: 3}}
-# {'x': 1, 'y': 2, 'z': 3}
-
-[*[1, 2, 3], *range(4, 8)]
-# [1, 2, 3, 4, 5, 6, 7]
-
-a = {&quot;x&quot;: 1, &quot;y&quot;: 2}
-b = {&quot;z&quot;: 3}
-{**a, **b}
-# {'x': 1, 'y': 2, 'z': 3}
-</code></pre>
-<h4 id="总结">总结</h4>
-<ol>
-<li>自动解包支持一切可迭代对象。</li>
-<li>python3中，支持更高级的解包操作，用星号操作使得等号左边的变量个数可以少于右边迭代对象中元素的个数。</li>
-<li>函数调用时，可以用 <code>*</code> 或者<code>**</code>解包可迭代对象，作为参数传递。</li>
-<li>python3.5，函数调用和表达式中可支持更多的解包操作。</li>
-</ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Mac设置终端ssh自动登录]]></title>
-        <id>https://fade-color.github.io/post/mac-she-zhi-zhong-duan-ssh-zi-dong-deng-lu/</id>
-        <link href="https://fade-color.github.io/post/mac-she-zhi-zhong-duan-ssh-zi-dong-deng-lu/">
-        </link>
-        <updated>2021-03-02T09:32:37.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="1-安装expect">1. 安装expect</h3>
-<pre><code class="language-bash">brew install expect
-</code></pre>
-<h3 id="2-编写expect登录脚本">2. 编写expect登录脚本</h3>
-<p>输入 <code>touch login.exp</code> 新建脚本</p>
-<p>接着输入 <code>vim ./login.exp</code> 编辑脚本，代码如下：</p>
-<pre><code class="language-bash">#!/usr/bin/expect -f
-
-# 定义第一个空格后的第一个变量是host
-set hostname [lindex $argv 0]
-# 定义第一个空格后的第二个变量是用户名
-set username [lindex $argv 1]
-# 定义第一个空格后的第三个变量是密码
-set password [lindex $argv 2]
-# 等待登录输入密码的时间，单位秒
-set timeout 30
-set force_conservative 1
-if {$force_conservative} {
-  set send_slow {128 .1}
-}
-# 执行登录ssh
-spawn ssh $username@$hostname;
-
-expect {
-        # 出现yes/no 时输入yes
-    &quot;yes/no&quot; {
-    send -s &quot;yes\r&quot;; exp_continue
-    }
-    # 出现password 自动输入变量密码
-    &quot;password&quot; {
-        send -s &quot;$password\r&quot;;
-    }
-}
-# 执行过后把权限交给终端
-interact
-</code></pre>
-<p>这样就可以通过命令<code>expect ./login.exp IP地址 用户名 密码</code>来进行登录服务器了。</p>
-<h3 id="3-编写bash脚本">3. 编写bash脚本</h3>
-<p>分别输入</p>
-<pre><code class="language-bash">touch sshlogin.sh
-vim ./sshlogin.sh
-</code></pre>
-<p>在脚本中粘贴以下代码（注意修改脚本中的ip地址用户名密码信息）：</p>
-<pre><code class="language-bash">#!/bin/bash
-
-clear
-RED='\033[0;31m'
-GRN='\033[0;32m'
-BLU='\033[0;34m'
-NC='\033[0m'
-# 获取执行login.exp路径
-pwdpath=$(cd &quot;$(dirname &quot;$0&quot;)&quot;;pwd)
-# ssh登录脚本指令, 注意这里要跟脚本命名要一致
-ssh=&quot;expect $pwdpath/login.exp&quot;
-
-# menu.sh
-
-echo &quot;---------------------------------------------------------------&quot;
-echo &quot;|              __                                             |&quot;
-echo &quot;|            _/  |_  ____ ______      ____  __ __  ____       |&quot;
-echo &quot;|            \   __\/  _ \\____ \    / ___\|  |  \/    \       |&quot;
-echo &quot;|             |  | (  &lt;_&gt; )  |_&gt; &gt;  / /_/  &gt;  |  /   |  \     |&quot;
-echo &quot;|             |__|  \____/|   __/   \___  /|____/|___|  /     |&quot;
-echo &quot;|                         |__|     /_____/            \/      |&quot;
-echo &quot;---------------------------------------------------------------&quot;
-
-# 服务器提示目录，可以根据自己需求修改
-echo &quot;--------------------------------------&quot;
-echo &quot;please enter your Server:&quot;
-echo -e &quot;(1) ${GRN}Linux Tencent qinian${NC}&quot;
-echo &quot;(2) Linux Tencent(disabled)&quot;
-echo &quot;(3) exit&quot;
-echo &quot;--------------------------------------&quot;
-read -p &quot;请选择服务器:&quot; input
-
-case ${input} in
-    1)
-    echo -e &quot;${GRN}Linux Tencent qinian${NC}&quot;
-    $ssh ip地址 用户名 密码
-    sleep 1;;
-    2)
-    # echo -e &quot;${GRN}Linux Tencent${NC}&quot;
-    # $ssh ip地址 用户名 密码
-    sleep 1;;
-    3)
-    exit;;
-esac
-</code></pre>
-<h3 id="4-修改脚本权限">4. 修改脚本权限</h3>
-<pre><code class="language-bash">chmod 755 sshlogin.sh
-</code></pre>
-<p>修改完成后就可以使用 <code>./sshlogin.sh</code> 命令来执行脚本</p>
-<h3 id="5-运行脚本">5. 运行脚本</h3>
-<p>输入 <code>./sshlogin.sh</code> 命令来执行脚本，出现以下界面：</p>
-<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2021/03/25/zc7eWR25rCXOpZf.png" alt="image-20210325215920244" loading="lazy"></figure>
-<p>输入序号后回车即可。</p>
-<figure data-type="image" tabindex="2"><img src="https://i.loli.net/2021/03/25/t9L4fdlnYXF1hKR.png" alt="image-20210325220057506" loading="lazy"></figure>
 ]]></content>
     </entry>
 </feed>
