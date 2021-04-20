@@ -9,7 +9,7 @@
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#000">
 <title>七年的万事屋</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1618887138215">
+<link rel="shortcut icon" href="/favicon.ico?v=1618888204526">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -197,7 +197,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">14</span>
+        <span class="site-item-stat-count">15</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -286,6 +286,12 @@
           </div>
         </div>
       </a>
+      
+      
+      
+      
+      
+      
       
       
       
@@ -1370,6 +1376,96 @@ print(&amp;quot;准确率为：\n&amp;quot;, score)
 &lt;p&gt;项目目的是预测一个人将要签到的地方。其中给定的虚拟世界包括&lt;strong&gt;10km*10km共100 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;msup&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;km^2&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.8141079999999999em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03148em;&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;msupsub&#34;&gt;&lt;span class=&#34;vlist-t&#34;&gt;&lt;span class=&#34;vlist-r&#34;&gt;&lt;span class=&#34;vlist&#34; style=&#34;height:0.8141079999999999em;&#34;&gt;&lt;span style=&#34;top:-3.063em;margin-right:0.05em;&#34;&gt;&lt;span class=&#34;pstrut&#34; style=&#34;height:2.7em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;sizing reset-size6 size3 mtight&#34;&gt;&lt;span class=&#34;mord mtight&#34;&gt;2&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的约10w个地方&lt;/strong&gt;。对于给定的坐标集，任务是&lt;strong&gt;根据用户的位置，准确性和时间戳等预测用户下一次的签到位置&lt;/strong&gt;。数据被制作成类似于来自移动设备的位置数据。&lt;/p&gt;
 &lt;h3 id=&#34;112-数据集介绍&#34;&gt;11.2. 数据集介绍&lt;/h3&gt;
 ">机器学习笔记01. K-近邻算法简介</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://fade-color.github.io/post/pandas-08-fen-zu-yu-ju-he/"" data-c="
+          &lt;h3 id=&#34;1-解释&#34;&gt;1. 解释&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;分组与聚合通常是分析数据的一种方式，通常与一些统计函数一起使用，查看数据的分组情况&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;其实交叉表与透视表也有分组的功能，所以算是分组的一种形式，只不过它们主要是计算次数或者计算比例。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;要注意抛开聚合谈分组是没有意义的&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;2-分组api&#34;&gt;2. 分组API&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;DataFrame.groupby(key, as_index=False)
+&lt;ul&gt;
+&lt;li&gt;key:分组的列数据，可以多个&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;3-案例不同颜色的不同笔的价格数据&#34;&gt;3. 案例：&lt;strong&gt;不同颜色的不同笔的价格数据&lt;/strong&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# 分组聚合：首先对数据进行，然后对每一组的数据进行聚合计算
+data = {
+    &#39;color&#39;: [&#39;white&#39;, &#39;red&#39;, &#39;green&#39;, &#39;red&#39;, &#39;green&#39;],
+    &#39;object&#39;: [&#39;pen&#39;, &#39;pencil&#39;, &#39;pencil&#39;, &#39;ashtray&#39;, &#39;pen&#39;],
+    &#39;price1&#39;: [5.56, 4.20, 1.30, 0.56, 2.75],
+    &#39;price2&#39;: [4.75, 4.12, 1.60, 0.75, 3.15]
+}
+
+data = pd.DataFrame(data)
+data
+
+  color	 object	price1	price2
+0	white	    pen	  5.56	  4.75
+1	  red	 pencil	  4.20	  4.12
+2	green	 pencil	  1.30	  1.60
+3	  red	ashtray	  0.56	  0.75
+4	green	    pen	  2.75	  3.15
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;进行分组，对颜色分组，price进行聚合&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# 首先，以 color 值作为分组条件，将数据集分为：white、red、green 三组
+# 然后，对每一组数据的 price1 列分别计算其平均值
+data.groupby([&amp;quot;color&amp;quot;])[&amp;quot;price1&amp;quot;].mean()
+
+color
+green    2.025
+red      2.380
+white    5.560
+Name: price1, dtype: float64
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;也可采取先获取列数据再进行分组的方式&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# data[&#39;price1&#39;] 获得 price1 这一列数据
+# groupby(data[&#39;color&#39;]) 对 price1 这一列数据通过 color 进行分组：white、red、green
+# 最后对每一组数据计算均值
+data[&amp;quot;price1&amp;quot;].groupby(data[&amp;quot;color&amp;quot;]).mean()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;4-案例星巴克各国家分布&#34;&gt;4. 案例：星巴克各国家分布&lt;/h3&gt;
+&lt;h4 id=&#34;41-获取数据&#34;&gt;4.1 获取数据&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;data = pd.read_csv(&amp;quot;./data/starbucks/directory.csv&amp;quot;)
+data.head()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;![image-20210420110613800](/Users/qinian/Library/Application Support/typora-user-images/image-20210420110613800.png)&lt;/p&gt;
+&lt;h4 id=&#34;42-进行分组聚合&#34;&gt;4.2 进行分组聚合&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# 按照国家分组，求出每个国家的星巴克零售店数量
+starbucks_count = data.groupby(&amp;quot;Country&amp;quot;)[&amp;quot;Brand&amp;quot;].count()
+starbucks_count
+
+Country
+AD        1
+AE      144
+AR      108
+AT       18
+AU       22
+      ...  
+TT        3
+TW      394
+US    13608
+VN       25
+ZA        3
+Name: Brand, Length: 73, dtype: int64
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;43-画图显示结果&#34;&gt;4.3 画图显示结果&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;plt.figure(figsize=(20, 8), dpi=60)
+
+starbucks_count.plot.bar(color=[&amp;quot;#f1c40f&amp;quot;, &amp;quot;#1abc9c&amp;quot;, &amp;quot;#8e44ad&amp;quot;, 
+                                &amp;quot;#d35400&amp;quot;, &amp;quot;#34495e&amp;quot;, &amp;quot;#f39c12&amp;quot;, 
+                                &amp;quot;#27ae60&amp;quot;, &amp;quot;#c0392b&amp;quot;, &amp;quot;#f368e0&amp;quot;,
+                                &amp;quot;#48dbfb&amp;quot;, &amp;quot;#5f27cd&amp;quot;, &amp;quot;#01a3a4&amp;quot;])
+plt.show()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;1&#34;&gt;&lt;img src=&#34;https://i.loli.net/2021/04/20/i4QUO3khBtZ2SlK.png&#34; alt=&#34;image-20210420110848067&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+">Pandas-08-分组与聚合</a>
       </div>
       
       <div class="item">

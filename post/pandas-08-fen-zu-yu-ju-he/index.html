@@ -8,7 +8,7 @@
 <meta name="keywords" content="Gridea静态个人博客">
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#000">
-<title>七年的万事屋</title>
+<title>Pandas-08-分组与聚合 | 七年的万事屋</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1618888204526">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -38,6 +38,8 @@
 
 
 
+  <meta name="description" content="Pandas-08-分组与聚合" />
+  <meta name="keywords" content="pandas,学习笔记" />
 </head>
 
 <body>
@@ -73,7 +75,7 @@
             
               
             
-            <li class="nav-item nav-item-active">
+            <li class="nav-item ">
               
               
                 <a href="/" target="_self">
@@ -185,8 +187,24 @@
     <div
       class="section-layout gemini ">
       <div class="section-layout-wrapper">
-        <div id="sidebarMeta" class="sidebar">
-    
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper bg-color right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body gemini" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
 <div class="sidebar-wrapper box-shadow-wrapper bg-color">
   <div class="sidebar-item">
     <img class="site-author-image right-motion" src="/images/avatar.png"/>
@@ -247,122 +265,297 @@
   </div>
 
 </div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#1-%E8%A7%A3%E9%87%8A">1. 解释</a></li>
+<li><a href="#2-%E5%88%86%E7%BB%84api">2. 分组API</a></li>
+<li><a href="#3-%E6%A1%88%E4%BE%8B%E4%B8%8D%E5%90%8C%E9%A2%9C%E8%89%B2%E7%9A%84%E4%B8%8D%E5%90%8C%E7%AC%94%E7%9A%84%E4%BB%B7%E6%A0%BC%E6%95%B0%E6%8D%AE">3. 案例：<strong>不同颜色的不同笔的价格数据</strong></a></li>
+<li><a href="#4-%E6%A1%88%E4%BE%8B%E6%98%9F%E5%B7%B4%E5%85%8B%E5%90%84%E5%9B%BD%E5%AE%B6%E5%88%86%E5%B8%83">4. 案例：星巴克各国家分布</a>
+<ul>
+<li><a href="#41-%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE">4.1 获取数据</a></li>
+<li><a href="#42-%E8%BF%9B%E8%A1%8C%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88">4.2 进行分组聚合</a></li>
+<li><a href="#43-%E7%94%BB%E5%9B%BE%E6%98%BE%E7%A4%BA%E7%BB%93%E6%9E%9C">4.3 画图显示结果</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
 </div>
+
 <script>
-  let sidebarMeta = document.querySelector('#sidebarMeta');
-  let scheme = 'gemini';
-  let sidebarWrapper = document.querySelector('.sidebar-wrapper');
-  if (sidebarMeta && (scheme === 'pisces' || scheme === 'gemini')) {
-    document.addEventListener('scroll', function(e) {
-      if (document.scrollingElement.scrollTop > parseInt(sidebarMeta.style.marginTop) + 10) {
-        sidebarWrapper.classList.add('home-sidebar-fixed')
-      } else {
-        sidebarWrapper.classList.remove('home-sidebar-fixed')
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
       }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
     });
   }
-  </script>
-        <div class="section-box gemini">
-          <section class="section  posts-expand slide-down-in">
-            
-  <article class="post-list-box  post box-shadow-wrapper">
-    <div class="article-wrapper bg-color">
-      <section class="post-header">
-  <h1 class="post-title">
-    <a class="post-title-link" href="https://fade-color.github.io/post/Jupyterlab-xian-shi-zhong-wen-zi-ti/">
-      JupyterLab 显示中文字体
-    </a>
-  </h1>
-  <div class="post-meta">
-    
-    <span class="meta-item pc-show">
-      <i class="fa fa-calendar-o"></i>
-      <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2021-04-03 17:28:28">2021-04-03</span>
-      <span class="post-meta-divider pc-show">|</span>
-    </span>
-    
-    <span class="meta-item">
-      <i class="fa fa-folder-o"></i>
-      <span class="pc-show language" data-lan="category-in">分类于</span>
-      
-      
-      <a href="https://fade-color.github.io/tag/JV27a86be/">
-        <span>matplotlib</span>
-      </a>、
-      
-      
-      
-      <a href="https://fade-color.github.io/tag/h-zK4ImM2/">
-        <span>Python</span>
-      </a>
-      
-      
-    </span>
-    <span class="post-meta-divider">|</span>
-    
-    <span class="meta-item">
-      <i class="fa fa-clock-o"></i>
-      <span>2<span class="language" data-lan="minute">分钟</span></span>
-    </span>
-    <span class="meta-item">
-      <span class="post-meta-divider">|</span>
-      <i class="fa fa-file-word-o"></i>
-      <span>300<span class="pc-show language" data-lan="words">字数</span></span>
-    </span>
-    
-  </div>
-</section>
-      <div class="post-body">
-        
-        
-          
-            <!-- 没有手动摘要切开启了自动摘要,则根据配置筛除摘要内容 -->
-            
-            
-              
-              
-              
-            
-              
-              
-              
-            
-              
-              
-              
-            
-            
-              <p><h3 id="查看当前系统jupyterlab支持的所有字体">查看当前系统JupyterLab支持的所有字体</h3>
-<pre><code class="language-python">from matplotlib.font_manager import FontManager
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
 
 
-                
-                  <!-- 自动摘要出来的内容有<code则补上结尾,防止格式错误 -->
-                  </code></pre>
-                
-              <p>
-            
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
           
-        
-        
-        <div class="post-button text-center">
-          <a class="btn language" data-lan="read-more" href="https://fade-color.github.io/post/Jupyterlab-xian-shi-zhong-wen-zi-ti/" rel="contents">
-            阅读全文 »
-          </a>
-        </div>
         
       </div>
-      
     </div>
-  </article>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
 
-  <article class="post-list-box  post box-shadow-wrapper">
-    <div class="article-wrapper bg-color">
-      <section class="post-header">
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    window.Velocity(hideElement, 'stop');
+    window.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        window.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://fade-color.github.io/post/numpy-ji-ben-cao-zuo/">
-      Numpy基本操作
+    <a class="post-title-link" href="https://fade-color.github.io/post/pandas-08-fen-zu-yu-ju-he/">
+      Pandas-08-分组与聚合
     </a>
   </h1>
   <div class="post-meta">
@@ -370,302 +563,23 @@
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2021-04-01 09:55:14">2021-04-01</span>
+      <span class="publish-time" data-t="2021-04-08 09:00:27">2021-04-08</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
     <span class="meta-item">
       <i class="fa fa-folder-o"></i>
       <span class="pc-show language" data-lan="category-in">分类于</span>
+      
+      
+      <a href="https://fade-color.github.io/tag/3vqqiUjyf/">
+        <span>pandas</span>
+      </a>、
+      
       
       
       <a href="https://fade-color.github.io/tag/kvztIB3-U/">
         <span>学习笔记</span>
-      </a>、
-      
-      
-      
-      <a href="https://fade-color.github.io/tag/h-zK4ImM2/">
-        <span>Python</span>
-      </a>
-      
-      
-    </span>
-    <span class="post-meta-divider">|</span>
-    
-    <span class="meta-item">
-      <i class="fa fa-clock-o"></i>
-      <span>6<span class="language" data-lan="minute">分钟</span></span>
-    </span>
-    <span class="meta-item">
-      <span class="post-meta-divider">|</span>
-      <i class="fa fa-file-word-o"></i>
-      <span>1205<span class="pc-show language" data-lan="words">字数</span></span>
-    </span>
-    
-  </div>
-</section>
-      <div class="post-body">
-        
-        
-          
-            <!-- 没有手动摘要切开启了自动摘要,则根据配置筛除摘要内容 -->
-            
-            
-              
-              
-              
-            
-              
-              
-              
-            
-              
-              
-              
-            
-            
-              <p><h3 id="1-数组创建">1. 数组创建</h3>
-<p>numpy中所有的计算都是围绕着数组进行的，因此在运算之前，我们需要将计算的数据表示成数组的形式。</p>
-<ul>
-
-                
-              <p>
-            
-          
-        
-        
-        <div class="post-button text-center">
-          <a class="btn language" data-lan="read-more" href="https://fade-color.github.io/post/numpy-ji-ben-cao-zuo/" rel="contents">
-            阅读全文 »
-          </a>
-        </div>
-        
-      </div>
-      
-    </div>
-  </article>
-
-  <article class="post-list-box  post box-shadow-wrapper">
-    <div class="article-wrapper bg-color">
-      <section class="post-header">
-  <h1 class="post-title">
-    <a class="post-title-link" href="https://fade-color.github.io/post/python-zhuang-shi-qi-zong-jie/">
-      Python装饰器总结
-    </a>
-  </h1>
-  <div class="post-meta">
-    
-    <span class="meta-item pc-show">
-      <i class="fa fa-calendar-o"></i>
-      <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2021-03-16 21:00:30">2021-03-16</span>
-      <span class="post-meta-divider pc-show">|</span>
-    </span>
-    
-    <span class="meta-item">
-      <i class="fa fa-folder-o"></i>
-      <span class="pc-show language" data-lan="category-in">分类于</span>
-      
-      
-      <a href="https://fade-color.github.io/tag/kvztIB3-U/">
-        <span>学习笔记</span>
-      </a>、
-      
-      
-      
-      <a href="https://fade-color.github.io/tag/h-zK4ImM2/">
-        <span>Python</span>
-      </a>
-      
-      
-    </span>
-    <span class="post-meta-divider">|</span>
-    
-    <span class="meta-item">
-      <i class="fa fa-clock-o"></i>
-      <span>3<span class="language" data-lan="minute">分钟</span></span>
-    </span>
-    <span class="meta-item">
-      <span class="post-meta-divider">|</span>
-      <i class="fa fa-file-word-o"></i>
-      <span>650<span class="pc-show language" data-lan="words">字数</span></span>
-    </span>
-    
-  </div>
-</section>
-      <div class="post-body">
-        
-        
-          
-            <!-- 没有手动摘要切开启了自动摘要,则根据配置筛除摘要内容 -->
-            
-            
-              
-              
-              
-            
-              
-              
-              
-            
-              
-              
-              
-            
-            
-              <p><h3 id="装饰器">装饰器</h3>
-<pre><code class="language-python"># --------------- 装饰器 --------------- #
-def decorator1(func):  # 传入被装饰的函数
-
-                
-                  <!-- 自动摘要出来的内容有<code则补上结尾,防止格式错误 -->
-                  </code></pre>
-                
-              <p>
-            
-          
-        
-        
-        <div class="post-button text-center">
-          <a class="btn language" data-lan="read-more" href="https://fade-color.github.io/post/python-zhuang-shi-qi-zong-jie/" rel="contents">
-            阅读全文 »
-          </a>
-        </div>
-        
-      </div>
-      
-    </div>
-  </article>
-
-  <article class="post-list-box  post box-shadow-wrapper">
-    <div class="article-wrapper bg-color">
-      <section class="post-header">
-  <h1 class="post-title">
-    <a class="post-title-link" href="https://fade-color.github.io/post/python-de-jie-bao/">
-      Python的解包
-    </a>
-  </h1>
-  <div class="post-meta">
-    
-    <span class="meta-item pc-show">
-      <i class="fa fa-calendar-o"></i>
-      <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2021-03-11 20:36:46">2021-03-11</span>
-      <span class="post-meta-divider pc-show">|</span>
-    </span>
-    
-    <span class="meta-item">
-      <i class="fa fa-folder-o"></i>
-      <span class="pc-show language" data-lan="category-in">分类于</span>
-      
-      
-      <a href="https://fade-color.github.io/tag/kvztIB3-U/">
-        <span>学习笔记</span>
-      </a>、
-      
-      
-      
-      <a href="https://fade-color.github.io/tag/h-zK4ImM2/">
-        <span>Python</span>
-      </a>
-      
-      
-    </span>
-    <span class="post-meta-divider">|</span>
-    
-    <span class="meta-item">
-      <i class="fa fa-clock-o"></i>
-      <span>3<span class="language" data-lan="minute">分钟</span></span>
-    </span>
-    <span class="meta-item">
-      <span class="post-meta-divider">|</span>
-      <i class="fa fa-file-word-o"></i>
-      <span>577<span class="pc-show language" data-lan="words">字数</span></span>
-    </span>
-    
-  </div>
-</section>
-      <div class="post-body">
-        
-        
-          
-            <!-- 没有手动摘要切开启了自动摘要,则根据配置筛除摘要内容 -->
-            
-            
-              
-              
-              
-            
-              
-              
-              
-            
-              
-              
-              
-            
-            
-              <p><h4 id="元组解包">元组解包</h4>
-<pre><code class="language-python">a, b, c = (1, 2, 3)
-# a:1 b:2 c:3
-
-                
-                  <!-- 自动摘要出来的内容有<code则补上结尾,防止格式错误 -->
-                  </code></pre>
-                
-              <p>
-            
-          
-        
-        
-        <div class="post-button text-center">
-          <a class="btn language" data-lan="read-more" href="https://fade-color.github.io/post/python-de-jie-bao/" rel="contents">
-            阅读全文 »
-          </a>
-        </div>
-        
-      </div>
-      
-    </div>
-  </article>
-
-  <article class="post-list-box  post box-shadow-wrapper">
-    <div class="article-wrapper bg-color">
-      <section class="post-header">
-  <h1 class="post-title">
-    <a class="post-title-link" href="https://fade-color.github.io/post/mac-she-zhi-zhong-duan-ssh-zi-dong-deng-lu/">
-      Mac设置终端ssh自动登录
-    </a>
-  </h1>
-  <div class="post-meta">
-    
-    <span class="meta-item pc-show">
-      <i class="fa fa-calendar-o"></i>
-      <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2021-03-02 17:32:37">2021-03-02</span>
-      <span class="post-meta-divider pc-show">|</span>
-    </span>
-    
-    <span class="meta-item">
-      <i class="fa fa-folder-o"></i>
-      <span class="pc-show language" data-lan="category-in">分类于</span>
-      
-      
-      <a href="https://fade-color.github.io/tag/moWFUcB6A/">
-        <span>终端</span>
-      </a>、
-      
-      
-      
-      <a href="https://fade-color.github.io/tag/UHfFJwNdA/">
-        <span>Terminal</span>
-      </a>、
-      
-      
-      
-      <a href="https://fade-color.github.io/tag/uXPD7vXXw/">
-        <span>Mac</span>
       </a>
       
       
@@ -684,80 +598,140 @@ def decorator1(func):  # 传入被装饰的函数
     
   </div>
 </section>
-      <div class="post-body">
-        
-        
-          
-            <!-- 没有手动摘要切开启了自动摘要,则根据配置筛除摘要内容 -->
-            
-            
-              
-              
-              
-            
-              
-              
-              
-            
-              
-              
-              
-            
-            
-              <p><h3 id="1-安装expect">1. 安装expect</h3>
-<pre><code class="language-bash">brew install expect
-</code></pre>
+            <div class="post-body next-md-body" id="post_body">
+              <h3 id="1-解释">1. 解释</h3>
+<p><strong>分组与聚合通常是分析数据的一种方式，通常与一些统计函数一起使用，查看数据的分组情况</strong>。</p>
+<p>其实交叉表与透视表也有分组的功能，所以算是分组的一种形式，只不过它们主要是计算次数或者计算比例。</p>
+<p><strong>要注意抛开聚合谈分组是没有意义的</strong>。</p>
+<h3 id="2-分组api">2. 分组API</h3>
+<ul>
+<li>DataFrame.groupby(key, as_index=False)
+<ul>
+<li>key:分组的列数据，可以多个</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-案例不同颜色的不同笔的价格数据">3. 案例：<strong>不同颜色的不同笔的价格数据</strong></h3>
+<pre><code class="language-python"># 分组聚合：首先对数据进行，然后对每一组的数据进行聚合计算
+data = {
+    'color': ['white', 'red', 'green', 'red', 'green'],
+    'object': ['pen', 'pencil', 'pencil', 'ashtray', 'pen'],
+    'price1': [5.56, 4.20, 1.30, 0.56, 2.75],
+    'price2': [4.75, 4.12, 1.60, 0.75, 3.15]
+}
 
-                
-                  <!-- 自动摘要出来的内容有<code则补上结尾,防止格式错误 -->
-                  </code></pre>
-                
-              <p>
+data = pd.DataFrame(data)
+data
+
+  color	 object	price1	price2
+0	white	    pen	  5.56	  4.75
+1	  red	 pencil	  4.20	  4.12
+2	green	 pencil	  1.30	  1.60
+3	  red	ashtray	  0.56	  0.75
+4	green	    pen	  2.75	  3.15
+</code></pre>
+<ul>
+<li>进行分组，对颜色分组，price进行聚合</li>
+</ul>
+<pre><code class="language-python"># 首先，以 color 值作为分组条件，将数据集分为：white、red、green 三组
+# 然后，对每一组数据的 price1 列分别计算其平均值
+data.groupby([&quot;color&quot;])[&quot;price1&quot;].mean()
+
+color
+green    2.025
+red      2.380
+white    5.560
+Name: price1, dtype: float64
+</code></pre>
+<p>也可采取先获取列数据再进行分组的方式</p>
+<pre><code class="language-python"># data['price1'] 获得 price1 这一列数据
+# groupby(data['color']) 对 price1 这一列数据通过 color 进行分组：white、red、green
+# 最后对每一组数据计算均值
+data[&quot;price1&quot;].groupby(data[&quot;color&quot;]).mean()
+</code></pre>
+<h3 id="4-案例星巴克各国家分布">4. 案例：星巴克各国家分布</h3>
+<h4 id="41-获取数据">4.1 获取数据</h4>
+<pre><code class="language-python">data = pd.read_csv(&quot;./data/starbucks/directory.csv&quot;)
+data.head()
+</code></pre>
+<p>![image-20210420110613800](/Users/qinian/Library/Application Support/typora-user-images/image-20210420110613800.png)</p>
+<h4 id="42-进行分组聚合">4.2 进行分组聚合</h4>
+<pre><code class="language-python"># 按照国家分组，求出每个国家的星巴克零售店数量
+starbucks_count = data.groupby(&quot;Country&quot;)[&quot;Brand&quot;].count()
+starbucks_count
+
+Country
+AD        1
+AE      144
+AR      108
+AT       18
+AU       22
+      ...  
+TT        3
+TW      394
+US    13608
+VN       25
+ZA        3
+Name: Brand, Length: 73, dtype: int64
+</code></pre>
+<h4 id="43-画图显示结果">4.3 画图显示结果</h4>
+<pre><code class="language-python">plt.figure(figsize=(20, 8), dpi=60)
+
+starbucks_count.plot.bar(color=[&quot;#f1c40f&quot;, &quot;#1abc9c&quot;, &quot;#8e44ad&quot;, 
+                                &quot;#d35400&quot;, &quot;#34495e&quot;, &quot;#f39c12&quot;, 
+                                &quot;#27ae60&quot;, &quot;#c0392b&quot;, &quot;#f368e0&quot;,
+                                &quot;#48dbfb&quot;, &quot;#5f27cd&quot;, &quot;#01a3a4&quot;])
+plt.show()
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2021/04/20/i4QUO3khBtZ2SlK.png" alt="image-20210420110848067" loading="lazy"></figure>
+
+            </div>
             
-          
-        
-        
-        <div class="post-button text-center">
-          <a class="btn language" data-lan="read-more" href="https://fade-color.github.io/post/mac-she-zhi-zhong-duan-ssh-zi-dong-deng-lu/" rel="contents">
-            阅读全文 »
-          </a>
-        </div>
-        
-      </div>
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      七年
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://fade-color.github.io/post/pandas-08-fen-zu-yu-ju-he/" title="Pandas-08-分组与聚合">https://fade-color.github.io/post/pandas-08-fen-zu-yu-ju-he/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://fade-color.github.io/tag/3vqqiUjyf/"># pandas</a>
+    
+      <a href="https://fade-color.github.io/tag/kvztIB3-U/"># 学习笔记</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="机器学习笔记01. K-近邻算法简介" href="https://fade-color.github.io/post/ji-qi-xue-xi-bi-ji-01-k-jin-lin-suan-fa-jian-jie/">机器学习笔记01. K-近邻算法简介</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="机器学习笔记01. K-近邻算法简介" href="https://fade-color.github.io/post/ji-qi-xue-xi-bi-ji-01-k-jin-lin-suan-fa-jian-jie/">上一篇</a>
       
     </div>
-  </article>
-  
-            
-            
-<div class="page bg-color">
-  <ul class="pagination-ul">
-    
-      <li class="pagination-dir">
-        <a href="https://fade-color.github.io/">
-          <i class="fa fa-angle-left"></i>
-        </a>
-      </li>
-    
-    
+    <div class="nav-next">
       
-        <li class="pagination-li ">
-            <a href="/page/../">
-              1
-            </a>
-        </li>
+        <a class="nav-pc-next" title="Pandas-07-交叉表 透视表" href="https://fade-color.github.io/post/pandas-07-jiao-cha-biao-tou-shi-biao/">Pandas-07-交叉表 透视表</a>
+        <a class="nav-mobile-next" title="Pandas-07-交叉表 透视表" href="https://fade-color.github.io/post/pandas-07-jiao-cha-biao-tou-shi-biao/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
       
-        <li class="pagination-li pagination-active">
-            <a href="/page/2">
-              2
-            </a>
-        </li>
-      
-    
-    
-  </ul>
+    </div>
+  </div>
 </div>
-          </section>
+            
+            
+  
+
+          </div>
         </div>
       </div>
     </div>
@@ -971,6 +945,223 @@ def decorator1(func):  # 传入被装饰的函数
     parent.insertBefore(aelem, next);
   })
 </script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip">打开微信扫一扫，即可进行扫码打赏哦</p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        window.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        window.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        window.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        window.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn.addEventListener('click', (e) => {
+      window.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
   </div>
 </body>
 
@@ -3957,6 +4148,5 @@ esac
 
   <div class="snow-container"></div>
   <script src="/media/js/bg/snow.js"></script>
-
 
 </html>
