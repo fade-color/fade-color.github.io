@@ -9,7 +9,7 @@
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#000">
 <title>七年的万事屋</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1618888204526">
+<link rel="shortcut icon" href="/favicon.ico?v=1618890208311">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -197,7 +197,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">15</span>
+        <span class="site-item-stat-count">16</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -292,6 +292,23 @@
       </a>
       
       
+      
+      
+      
+      
+      
+      
+      
+      <a href="https://fade-color.github.io/post/pandas-09-zong-he-an-li/">
+        <div class="motion-warpper">
+          <div class="tag-post-node">
+            <h1>
+              04-08
+              <small>Pandas-09-综合案例</small>
+            </h1>
+          </div>
+        </div>
+      </a>
       
       
       
@@ -1486,6 +1503,169 @@ print(&amp;quot;准确率为：\n&amp;quot;, score)
 &lt;p&gt;项目目的是预测一个人将要签到的地方。其中给定的虚拟世界包括&lt;strong&gt;10km*10km共100 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;msup&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;km^2&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.8141079999999999em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03148em;&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;msupsub&#34;&gt;&lt;span class=&#34;vlist-t&#34;&gt;&lt;span class=&#34;vlist-r&#34;&gt;&lt;span class=&#34;vlist&#34; style=&#34;height:0.8141079999999999em;&#34;&gt;&lt;span style=&#34;top:-3.063em;margin-right:0.05em;&#34;&gt;&lt;span class=&#34;pstrut&#34; style=&#34;height:2.7em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;sizing reset-size6 size3 mtight&#34;&gt;&lt;span class=&#34;mord mtight&#34;&gt;2&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的约10w个地方&lt;/strong&gt;。对于给定的坐标集，任务是&lt;strong&gt;根据用户的位置，准确性和时间戳等预测用户下一次的签到位置&lt;/strong&gt;。数据被制作成类似于来自移动设备的位置数据。&lt;/p&gt;
 &lt;h3 id=&#34;112-数据集介绍&#34;&gt;11.2. 数据集介绍&lt;/h3&gt;
 ">机器学习笔记01. K-近邻算法简介</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://fade-color.github.io/post/pandas-09-zong-he-an-li/"" data-c="
+          &lt;h3 id=&#34;1-需求分析&#34;&gt;1. 需求分析&lt;/h3&gt;
+&lt;p&gt;现在有一组从2006年到2016年1000部最流行的电影数据&lt;/p&gt;
+&lt;p&gt;数据来源：https://www.kaggle.com/damianpanek/sunday-eda/data&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;问题1：我们想知道这些电影数据中评分的平均分，导演的人数等信息，我们应该怎么获取？&lt;/li&gt;
+&lt;li&gt;问题2：对于这一组电影数据，如果我们想rating，runtime的分布情况，应该如何呈现数据？&lt;/li&gt;
+&lt;li&gt;问题3：对于这一组电影数据，如果我们希望统计电影分类(genre)的情况，应该如何处理数据？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-实现&#34;&gt;2. 实现&lt;/h3&gt;
+&lt;p&gt;首先导入数据：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;movie = pd.read_csv(&amp;quot;./data/IMDB-Movie-Data.csv&amp;quot;)
+movie.head()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;1&#34;&gt;&lt;img src=&#34;https://i.loli.net/2021/04/20/w567SEuih423Gd1.png&#34; alt=&#34;image-20210420111338305&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;h4 id=&#34;21-问题1&#34;&gt;2.1 问题1&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;我们想知道这些电影数据中评分的平均分，导演的人数等信息，我们应该怎么获取？&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;获取评分的平均分&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;movie[&amp;quot;Rating&amp;quot;].mean()
+
+6.723199999999999
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;获取导演人数&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;np.unique(movie[&amp;quot;Director&amp;quot;]).shape[0]
+
+644
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;22-问题2&#34;&gt;2.2 问题2&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;对于这一组电影数据，如果我们想rating，runtime的分布情况，应该如何呈现数据？&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;想直接呈现，以直方图的形式&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;对 &lt;code&gt;Rating&lt;/code&gt; 列进行画图展示：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;movie[&amp;quot;Rating&amp;quot;].plot(kind=&amp;quot;hist&amp;quot;, bins=20)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;2&#34;&gt;&lt;img src=&#34;https://i.loli.net/2021/04/20/qPEgrn3lhAWoOMZ.png&#34; alt=&#34;image-20210420111847500&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;blockquote&gt;
+&lt;p&gt;这样画出的图x轴刻度会有问题（刻度不齐等），这是就要进行手动调整。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;对x轴刻度进行调整&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;plt.figure(figsize=(20, 8), dpi=60)
+
+plt.hist(movie[&amp;quot;Rating&amp;quot;].values, bins=20)
+
+# 求出最大最小值
+max_ = movie[&amp;quot;Rating&amp;quot;].max()
+min_ = movie[&amp;quot;Rating&amp;quot;].min()
+
+# 注意要生成 21 个刻度值
+t1 = np.linspace(min_, max_, num=21)
+
+# 修改刻度
+plt.xticks(t1)
+
+plt.grid()
+
+plt.show()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;3&#34;&gt;&lt;img src=&#34;https://i.loli.net/2021/04/20/1lvjEhS7RPuFQoC.png&#34; alt=&#34;image-20210420112245977&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;h4 id=&#34;33-问题3&#34;&gt;3.3 问题3&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;对于这一组电影数据，如果我们希望统计电影分类(genre)的情况，应该如何处理数据？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;思路分析&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;思路
+&lt;ul&gt;
+&lt;li&gt;1、创建一个全为0的&lt;code&gt;dataframe&lt;/code&gt;，列索引置为电影的分类，&lt;code&gt;temp_df&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;2、遍历每一部电影，&lt;code&gt;temp_df&lt;/code&gt;中把分类出现的列的值置为&lt;code&gt;1&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;3、求和&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;方法一&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;获取分类类别&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# 将&amp;quot;Genre&amp;quot;列的分类放在列表中
+genre_list = [j for i in movie[&amp;quot;Genre&amp;quot;] for j in i.split(&amp;quot;,&amp;quot;)]
+# 去除重复的分类
+genre_list = np.unique(genre_list)
+genre_list
+
+array([&#39;Action&#39;, &#39;Adventure&#39;, &#39;Animation&#39;, &#39;Biography&#39;, &#39;Comedy&#39;, &#39;Crime&#39;,
+       &#39;Drama&#39;, &#39;Family&#39;, &#39;Fantasy&#39;, &#39;History&#39;, &#39;Horror&#39;, &#39;Music&#39;,
+       &#39;Musical&#39;, &#39;Mystery&#39;, &#39;Romance&#39;, &#39;Sci-Fi&#39;, &#39;Sport&#39;, &#39;Thriller&#39;,
+       &#39;War&#39;, &#39;Western&#39;], dtype=&#39;&amp;lt;U9&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;创建一个全为0的dataframe，列索引置为电影的分类&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# 行数为电影行数，列数为类别数量
+genre_df = np.zeros([movie.shape[0], genre_list.shape[0]])
+
+genre_df = pd.DataFrame(genre_df, columns=genre_list, index=movie.index)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;4&#34;&gt;&lt;img src=&#34;https://i.loli.net/2021/04/20/bHRQj3tkrEOJ46D.png&#34; alt=&#34;image-20210420112949872&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;遍历每一部电影，把分类出现的列的值置为1&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;genre_tmp = [i.split(&amp;quot;,&amp;quot;) for i in movie[&amp;quot;Genre&amp;quot;]]
+for i in range(movie.shape[0]):
+    genre_df.loc[i, genre_tmp[i]] = 1
+
+# 排序
+genre_statistics = genre_df.sum().sort_values(ascending=False)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;画出图像&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;plt.figure(figsize=(20, 8), dpi=60)
+genre_statistics.plot.bar()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;5&#34;&gt;&lt;img src=&#34;https://i.loli.net/2021/04/20/46hFaPdYrpxtziD.png&#34; alt=&#34;image-20210420113159851&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;方法二&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;获取分类类别并用set方法去重&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;genre_list_all = [j for i in movie[&amp;quot;Genre&amp;quot;] for j in i.split(&amp;quot;,&amp;quot;)]
+genre_list = set(genre_list_all)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;创建一个全为0的dataframe，列索引为&lt;strong&gt;每种类别出现的次数&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;genre_df = pd.DataFrame(np.zeros(len(genre_list)), index=genre_list, dtype=np.int32)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;img src=&#34;https://i.loli.net/2021/04/20/6WBcSax2XovPbE8.png&#34; alt=&#34;image-20210420113710800&#34; style=&#34;zoom:50%;&#34; /&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;循环遍历未去重前的分类列表&lt;code&gt;genre_list_all&lt;/code&gt;，将出现的分类数量加1&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-py&#34;&gt;for i in genre_list_all:
+    genre_df.loc[i, 0] += 1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;按降序排序后将列名命名为数量&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;genre_df = genre_df.sort_values(by=0, ascending=False)
+genre_df.rename(columns={0: &amp;quot;数量&amp;quot;}, inplace=True)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;画图&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;genre_df.plot.bar(figsize=(20, 8))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;6&#34;&gt;&lt;img src=&#34;https://i.loli.net/2021/04/20/PWnZVBIHMvm3OD5.png&#34; alt=&#34;image-20210420114203364&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+">Pandas-09-综合案例</a>
       </div>
       
       <div class="item">

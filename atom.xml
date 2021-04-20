@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://fade-color.github.io</id>
     <title>七年的万事屋</title>
-    <updated>2021-04-20T03:12:34.855Z</updated>
+    <updated>2021-04-20T03:43:31.835Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://fade-color.github.io"/>
     <link rel="self" href="https://fade-color.github.io/atom.xml"/>
@@ -779,6 +779,172 @@ print(&quot;准确率为：\n&quot;, score)
 <h3 id="111-项目描述">11.1. 项目描述</h3>
 <p>项目目的是预测一个人将要签到的地方。其中给定的虚拟世界包括<strong>10km*10km共100 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi><msup><mi>m</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">km^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mord"><span class="mord mathdefault">m</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> 的约10w个地方</strong>。对于给定的坐标集，任务是<strong>根据用户的位置，准确性和时间戳等预测用户下一次的签到位置</strong>。数据被制作成类似于来自移动设备的位置数据。</p>
 <h3 id="112-数据集介绍">11.2. 数据集介绍</h3>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Pandas-09-综合案例]]></title>
+        <id>https://fade-color.github.io/post/pandas-09-zong-he-an-li/</id>
+        <link href="https://fade-color.github.io/post/pandas-09-zong-he-an-li/">
+        </link>
+        <updated>2021-04-08T03:42:36.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="1-需求分析">1. 需求分析</h3>
+<p>现在有一组从2006年到2016年1000部最流行的电影数据</p>
+<p>数据来源：https://www.kaggle.com/damianpanek/sunday-eda/data</p>
+<ul>
+<li>问题1：我们想知道这些电影数据中评分的平均分，导演的人数等信息，我们应该怎么获取？</li>
+<li>问题2：对于这一组电影数据，如果我们想rating，runtime的分布情况，应该如何呈现数据？</li>
+<li>问题3：对于这一组电影数据，如果我们希望统计电影分类(genre)的情况，应该如何处理数据？</li>
+</ul>
+<h3 id="2-实现">2. 实现</h3>
+<p>首先导入数据：</p>
+<pre><code class="language-python">movie = pd.read_csv(&quot;./data/IMDB-Movie-Data.csv&quot;)
+movie.head()
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2021/04/20/w567SEuih423Gd1.png" alt="image-20210420111338305" loading="lazy"></figure>
+<h4 id="21-问题1">2.1 问题1</h4>
+<p><strong>我们想知道这些电影数据中评分的平均分，导演的人数等信息，我们应该怎么获取？</strong></p>
+<ul>
+<li>
+<p>获取评分的平均分</p>
+<pre><code class="language-python">movie[&quot;Rating&quot;].mean()
+
+6.723199999999999
+</code></pre>
+</li>
+<li>
+<p>获取导演人数</p>
+<pre><code class="language-python">np.unique(movie[&quot;Director&quot;]).shape[0]
+
+644
+</code></pre>
+</li>
+</ul>
+<h4 id="22-问题2">2.2 问题2</h4>
+<p><strong>对于这一组电影数据，如果我们想rating，runtime的分布情况，应该如何呈现数据？</strong></p>
+<blockquote>
+<p>想直接呈现，以直方图的形式</p>
+</blockquote>
+<p>对 <code>Rating</code> 列进行画图展示：</p>
+<pre><code class="language-python">movie[&quot;Rating&quot;].plot(kind=&quot;hist&quot;, bins=20)
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://i.loli.net/2021/04/20/qPEgrn3lhAWoOMZ.png" alt="image-20210420111847500" loading="lazy"></figure>
+<blockquote>
+<p>这样画出的图x轴刻度会有问题（刻度不齐等），这是就要进行手动调整。</p>
+</blockquote>
+<p><strong>对x轴刻度进行调整</strong></p>
+<pre><code class="language-python">plt.figure(figsize=(20, 8), dpi=60)
+
+plt.hist(movie[&quot;Rating&quot;].values, bins=20)
+
+# 求出最大最小值
+max_ = movie[&quot;Rating&quot;].max()
+min_ = movie[&quot;Rating&quot;].min()
+
+# 注意要生成 21 个刻度值
+t1 = np.linspace(min_, max_, num=21)
+
+# 修改刻度
+plt.xticks(t1)
+
+plt.grid()
+
+plt.show()
+</code></pre>
+<figure data-type="image" tabindex="3"><img src="https://i.loli.net/2021/04/20/1lvjEhS7RPuFQoC.png" alt="image-20210420112245977" loading="lazy"></figure>
+<h4 id="33-问题3">3.3 问题3</h4>
+<p><strong>对于这一组电影数据，如果我们希望统计电影分类(genre)的情况，应该如何处理数据？</strong></p>
+<p>思路分析</p>
+<ul>
+<li>思路
+<ul>
+<li>1、创建一个全为0的<code>dataframe</code>，列索引置为电影的分类，<code>temp_df</code></li>
+<li>2、遍历每一部电影，<code>temp_df</code>中把分类出现的列的值置为<code>1</code></li>
+<li>3、求和</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>
+<p><strong>方法一</strong></p>
+<ul>
+<li>
+<p>获取分类类别</p>
+<pre><code class="language-python"># 将&quot;Genre&quot;列的分类放在列表中
+genre_list = [j for i in movie[&quot;Genre&quot;] for j in i.split(&quot;,&quot;)]
+# 去除重复的分类
+genre_list = np.unique(genre_list)
+genre_list
+
+array(['Action', 'Adventure', 'Animation', 'Biography', 'Comedy', 'Crime',
+       'Drama', 'Family', 'Fantasy', 'History', 'Horror', 'Music',
+       'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Sport', 'Thriller',
+       'War', 'Western'], dtype='&lt;U9')
+</code></pre>
+</li>
+<li>
+<p>创建一个全为0的dataframe，列索引置为电影的分类</p>
+<pre><code class="language-python"># 行数为电影行数，列数为类别数量
+genre_df = np.zeros([movie.shape[0], genre_list.shape[0]])
+
+genre_df = pd.DataFrame(genre_df, columns=genre_list, index=movie.index)
+</code></pre>
+<figure data-type="image" tabindex="4"><img src="https://i.loli.net/2021/04/20/bHRQj3tkrEOJ46D.png" alt="image-20210420112949872" loading="lazy"></figure>
+</li>
+<li>
+<p>遍历每一部电影，把分类出现的列的值置为1</p>
+<pre><code class="language-python">genre_tmp = [i.split(&quot;,&quot;) for i in movie[&quot;Genre&quot;]]
+for i in range(movie.shape[0]):
+    genre_df.loc[i, genre_tmp[i]] = 1
+
+# 排序
+genre_statistics = genre_df.sum().sort_values(ascending=False)
+</code></pre>
+</li>
+<li>
+<p>画出图像</p>
+<pre><code class="language-python">plt.figure(figsize=(20, 8), dpi=60)
+genre_statistics.plot.bar()
+</code></pre>
+<figure data-type="image" tabindex="5"><img src="https://i.loli.net/2021/04/20/46hFaPdYrpxtziD.png" alt="image-20210420113159851" loading="lazy"></figure>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>方法二</strong></p>
+<ul>
+<li>
+<p>获取分类类别并用set方法去重</p>
+<pre><code class="language-python">genre_list_all = [j for i in movie[&quot;Genre&quot;] for j in i.split(&quot;,&quot;)]
+genre_list = set(genre_list_all)
+</code></pre>
+</li>
+<li>
+<p>创建一个全为0的dataframe，列索引为<strong>每种类别出现的次数</strong></p>
+<pre><code class="language-python">genre_df = pd.DataFrame(np.zeros(len(genre_list)), index=genre_list, dtype=np.int32)
+</code></pre>
+<img src="https://i.loli.net/2021/04/20/6WBcSax2XovPbE8.png" alt="image-20210420113710800" style="zoom:50%;" />
+</li>
+<li>
+<p>循环遍历未去重前的分类列表<code>genre_list_all</code>，将出现的分类数量加1</p>
+<pre><code class="language-py">for i in genre_list_all:
+    genre_df.loc[i, 0] += 1
+</code></pre>
+</li>
+<li>
+<p>按降序排序后将列名命名为数量</p>
+<pre><code class="language-python">genre_df = genre_df.sort_values(by=0, ascending=False)
+genre_df.rename(columns={0: &quot;数量&quot;}, inplace=True)
+</code></pre>
+</li>
+<li>
+<p>画图</p>
+<pre><code class="language-python">genre_df.plot.bar(figsize=(20, 8))
+</code></pre>
+<figure data-type="image" tabindex="6"><img src="https://i.loli.net/2021/04/20/PWnZVBIHMvm3OD5.png" alt="image-20210420114203364" loading="lazy"></figure>
+</li>
+</ul>
+</li>
+</ol>
 ]]></content>
     </entry>
     <entry>
@@ -1947,98 +2113,6 @@ data.sort_index()
 </code></pre>
 </li>
 </ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Matplotlib更改plot样式]]></title>
-        <id>https://fade-color.github.io/post/matplotlib-geng-gai-plot-yang-shi/</id>
-        <link href="https://fade-color.github.io/post/matplotlib-geng-gai-plot-yang-shi/">
-        </link>
-        <updated>2021-04-04T12:33:40.000Z</updated>
-        <content type="html"><![CDATA[<p>觉得Matplotlib.pyplot原本的样式不够好看，于是就研究了一下怎么更改其样式</p>
-<p>plt是自带了很多样式的，输入以下代码查看自带样式：</p>
-<pre><code class="language-python">import matplotlib.pyplot as plt
-
-plt.style.available
-</code></pre>
-<p>输出结果如下：</p>
-<pre><code class="language-python">['Solarize_Light2',
- '_classic_test_patch',
- 'bmh',
- 'classic',
- 'dark_background',
- 'fast',
- 'fivethirtyeight',
- 'ggplot',
- 'grayscale',
- 'seaborn',
- 'seaborn-bright',
- 'seaborn-colorblind',
- 'seaborn-dark',
- 'seaborn-dark-palette',
- 'seaborn-darkgrid',
- 'seaborn-deep',
- 'seaborn-muted',
- 'seaborn-notebook',
- 'seaborn-paper',
- 'seaborn-pastel',
- 'seaborn-poster',
- 'seaborn-talk',
- 'seaborn-ticks',
- 'seaborn-white',
- 'seaborn-whitegrid',
- 'tableau-colorblind10']
-</code></pre>
-<p>这里就是全部自带的主题了</p>
-<p>应用样式：</p>
-<pre><code class="language-python">plt.style.use('seaborn-darkgrid')
-</code></pre>
-<p>再进行画图就可以看到效果了</p>
-<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2021/04/17/aeUEAoxN3SB19pq.png" alt="函数" loading="lazy"></figure>
-<p>如果想要将该样式设为默认，就要修改<code>matplotlibrc</code>文件使其永久生效：</p>
-<p>找到要应用的样式文件（以seaborn-darkgrid为例）：</p>
-<p>windows下可以用everything进行搜索，mac下可以进到python包目录下的matplotlib文件夹下搜索</p>
-<p>搜索<code>seaborn-darkgrid.mplstyle</code>文件，如下：</p>
-<figure data-type="image" tabindex="2"><img src="https://i.loli.net/2021/04/17/TdUYaQoZmyHsh2q.png" alt="image-20210417103801262" loading="lazy"></figure>
-<p>用文本编辑器打开内容如下：</p>
-<pre><code class="language-yml"># Seaborn common parameters
-# .15 = dark_gray
-# .8 = light_gray
-figure.facecolor: white
-text.color: .15
-axes.labelcolor: .15
-legend.frameon: False
-legend.numpoints: 1
-legend.scatterpoints: 1
-xtick.direction: out
-ytick.direction: out
-xtick.color: .15
-ytick.color: .15
-axes.axisbelow: True
-image.cmap: Greys
-font.family: sans-serif
-font.sans-serif: Arial, Liberation Sans, DejaVu Sans, Bitstream Vera Sans, sans-serif
-grid.linestyle: -
-lines.solid_capstyle: round
-
-# Seaborn darkgrid parameters
-axes.grid: True
-axes.facecolor: EAEAF2
-axes.edgecolor: white
-axes.linewidth: 0
-grid.color: white
-xtick.major.size: 0
-ytick.major.size: 0
-xtick.minor.size: 0
-ytick.minor.size: 0
-</code></pre>
-<p>接下来找到<code>matplotlibrc</code>文件：</p>
-<ul>
-<li>Mac：直接打开终端输入<code>vim ~/.matplotlib/matplotlibrc</code></li>
-<li>Win：在<code>C:/Users</code>找到用户目录进入后把显示隐藏文件打开，进入到<code>.matplotlib</code>文件夹即可找到该文件（如果没有就新建一个）</li>
-</ul>
-<p>将<code>seaborn-darkgrid.mplstyle</code>文件中的内容复制到<code>matplotlibrc</code>文件中即可。</p>
-<p>重启JupyterLab即可看到效果。</p>
 ]]></content>
     </entry>
 </feed>

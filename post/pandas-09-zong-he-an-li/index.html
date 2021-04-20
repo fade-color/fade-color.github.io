@@ -8,7 +8,7 @@
 <meta name="keywords" content="Gridea静态个人博客">
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#000">
-<title>Pandas-06-数据合并 | 七年的万事屋</title>
+<title>Pandas-09-综合案例 | 七年的万事屋</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1618890208311">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -38,7 +38,7 @@
 
 
 
-  <meta name="description" content="Pandas-06-数据合并" />
+  <meta name="description" content="Pandas-09-综合案例" />
   <meta name="keywords" content="pandas,学习笔记" />
 </head>
 
@@ -275,9 +275,14 @@
 <ul>
 <li>
 <ul>
-<li><a href="#1-pdconcat%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E5%90%88%E5%B9%B6">1. pd.concat实现数据合并</a></li>
-<li><a href="#2-pdmerge">2. pd.merge</a></li>
-<li><a href="#3-%E6%80%BB%E7%BB%93">3. 总结</a></li>
+<li><a href="#1-%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90">1. 需求分析</a></li>
+<li><a href="#2-%E5%AE%9E%E7%8E%B0">2. 实现</a>
+<ul>
+<li><a href="#21-%E9%97%AE%E9%A2%981">2.1 问题1</a></li>
+<li><a href="#22-%E9%97%AE%E9%A2%982">2.2 问题2</a></li>
+<li><a href="#33-%E9%97%AE%E9%A2%983">3.3 问题3</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -547,8 +552,8 @@
           <div class="section bg-color post post-page">
             <section class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://fade-color.github.io/post/pandas-06-shu-ju-he-bing/">
-      Pandas-06-数据合并
+    <a class="post-title-link" href="https://fade-color.github.io/post/pandas-09-zong-he-an-li/">
+      Pandas-09-综合案例
     </a>
   </h1>
   <div class="post-meta">
@@ -556,7 +561,7 @@
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2021-04-07 15:06:02">2021-04-07</span>
+      <span class="publish-time" data-t="2021-04-08 11:42:36">2021-04-08</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
@@ -581,126 +586,175 @@
     
     <span class="meta-item">
       <i class="fa fa-clock-o"></i>
-      <span>3<span class="language" data-lan="minute">分钟</span></span>
+      <span>4<span class="language" data-lan="minute">分钟</span></span>
     </span>
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>422<span class="pc-show language" data-lan="words">字数</span></span>
+      <span>817<span class="pc-show language" data-lan="words">字数</span></span>
     </span>
     
   </div>
 </section>
             <div class="post-body next-md-body" id="post_body">
-              <h3 id="1-pdconcat实现数据合并">1. pd.concat实现数据合并</h3>
+              <h3 id="1-需求分析">1. 需求分析</h3>
+<p>现在有一组从2006年到2016年1000部最流行的电影数据</p>
+<p>数据来源：https://www.kaggle.com/damianpanek/sunday-eda/data</p>
 <ul>
-<li>
-<p>pd.concat([data1, data2], axis=1)</p>
-<ul>
-<li>按照行或列进行合并，axis=0为列索引，axis=1为行索引</li>
+<li>问题1：我们想知道这些电影数据中评分的平均分，导演的人数等信息，我们应该怎么获取？</li>
+<li>问题2：对于这一组电影数据，如果我们想rating，runtime的分布情况，应该如何呈现数据？</li>
+<li>问题3：对于这一组电影数据，如果我们希望统计电影分类(genre)的情况，应该如何处理数据？</li>
 </ul>
-<p>比如将刚才处理好的one-hot编码与原数据合并</p>
-<pre><code class="language-python"># 按照行索引进行合并
-pd.concat([data, dummies], axis=1)
+<h3 id="2-实现">2. 实现</h3>
+<p>首先导入数据：</p>
+<pre><code class="language-python">movie = pd.read_csv(&quot;./data/IMDB-Movie-Data.csv&quot;)
+movie.head()
 </code></pre>
-<figure data-type="image" tabindex="1"><img src="https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210313200004169.png" alt="image-20210313200004169" loading="lazy"></figure>
-</li>
-</ul>
-<h3 id="2-pdmerge">2. pd.merge</h3>
+<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2021/04/20/w567SEuih423Gd1.png" alt="image-20210420111338305" loading="lazy"></figure>
+<h4 id="21-问题1">2.1 问题1</h4>
+<p><strong>我们想知道这些电影数据中评分的平均分，导演的人数等信息，我们应该怎么获取？</strong></p>
 <ul>
 <li>
-<p>pd.merge(left, right, how='inner', on=None)</p>
-<ul>
-<li>可以指定按照两组共同的数据的共同键值对合并或者左右各自</li>
-<li><code>left</code>：DataFrame</li>
-<li><code>right</code>：另一个DataFrame</li>
-<li><code>on</code>：指定的共同键</li>
-<li><code>how</code>：按照什么方式进行连接</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">Merge method</th>
-<th style="text-align:center">SQL Jion Name</th>
-<th style="text-align:center">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><code>left</code></td>
-<td style="text-align:center"><code>LEFT OUTER JION</code></td>
-<td style="text-align:center">左连接</td>
-</tr>
-<tr>
-<td style="text-align:center"><code>right</code></td>
-<td style="text-align:center"><code>RIGHT OUTER JION</code></td>
-<td style="text-align:center">右连接</td>
-</tr>
-<tr>
-<td style="text-align:center"><code>inner</code></td>
-<td style="text-align:center"><code>INNER JION</code></td>
-<td style="text-align:center">内连接</td>
-</tr>
-<tr>
-<td style="text-align:center"><code>outer</code></td>
-<td style="text-align:center"><code>FULL OUTER JION</code></td>
-<td style="text-align:center">外连接</td>
-</tr>
-</tbody>
-</table>
-<pre><code class="language-python">left = pd.DataFrame({
-    &quot;A&quot;: [&quot;A0&quot;, &quot;A1&quot;, &quot;A2&quot;, &quot;A3&quot;],
-    &quot;B&quot;: [&quot;B0&quot;, &quot;B1&quot;, &quot;B2&quot;, &quot;B3&quot;],
-    &quot;key1&quot;: [&quot;K0&quot;, &quot;K0&quot;, &quot;K1&quot;, &quot;K2&quot;],
-    &quot;key2&quot;: [&quot;K0&quot;, &quot;K1&quot;, &quot;K0&quot;, &quot;K1&quot;]
-})
-right = pd.DataFrame({
-    &quot;C&quot;: [&quot;C0&quot;, &quot;C1&quot;, &quot;C2&quot;, &quot;C3&quot;],
-    &quot;D&quot;: [&quot;D0&quot;, &quot;D1&quot;, &quot;D2&quot;, &quot;D3&quot;],
-    &quot;key1&quot;: [&quot;K0&quot;, &quot;K1&quot;, &quot;K1&quot;, &quot;K2&quot;],
-    &quot;key2&quot;: [&quot;K0&quot;, &quot;K0&quot;, &quot;K0&quot;, &quot;K0&quot;]
-})
+<p>获取评分的平均分</p>
+<pre><code class="language-python">movie[&quot;Rating&quot;].mean()
+
+6.723199999999999
 </code></pre>
 </li>
 <li>
-<p>默认为内连接：</p>
-<pre><code class="language-python"># 默认内连接
-result = pd.merge(left, right, on=[&quot;key1&quot;, &quot;key2&quot;])
+<p>获取导演人数</p>
+<pre><code class="language-python">np.unique(movie[&quot;Director&quot;]).shape[0]
+
+644
 </code></pre>
-<figure data-type="image" tabindex="2"><img src="https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210313203441190.png" alt="image-20210313203441190" loading="lazy"></figure>
-</li>
-<li>
-<p>左连接</p>
-<pre><code class="language-python"># 左连接
-result = pd.merge(left, right, how=&quot;left&quot;, on=[&quot;key1&quot;, &quot;key2&quot;])
-</code></pre>
-<figure data-type="image" tabindex="3"><img src="https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210313203723482.png" alt="image-20210313203723482" loading="lazy"></figure>
-</li>
-<li>
-<p>右连接</p>
-<pre><code class="language-python"># 右连接
-result = pd.merge(left, right, how=&quot;right&quot;, on=[&quot;key1&quot;, &quot;key2&quot;])
-</code></pre>
-<figure data-type="image" tabindex="4"><img src="https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210313203845121.png" alt="image-20210313203845121" loading="lazy"></figure>
-</li>
-<li>
-<p>外连接</p>
-<pre><code class="language-python"># 外连接
-result = pd.merge(left, right, how=&quot;outer&quot;, on=[&quot;key1&quot;, &quot;key2&quot;])
-</code></pre>
-<figure data-type="image" tabindex="5"><img src="https://gitee.com/fadecolor/pic_cloud/raw/master/image-20210313204004267.png" alt="image-20210313204004267" loading="lazy"></figure>
 </li>
 </ul>
-<h3 id="3-总结">3. 总结</h3>
+<h4 id="22-问题2">2.2 问题2</h4>
+<p><strong>对于这一组电影数据，如果我们想rating，runtime的分布情况，应该如何呈现数据？</strong></p>
+<blockquote>
+<p>想直接呈现，以直方图的形式</p>
+</blockquote>
+<p>对 <code>Rating</code> 列进行画图展示：</p>
+<pre><code class="language-python">movie[&quot;Rating&quot;].plot(kind=&quot;hist&quot;, bins=20)
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://i.loli.net/2021/04/20/qPEgrn3lhAWoOMZ.png" alt="image-20210420111847500" loading="lazy"></figure>
+<blockquote>
+<p>这样画出的图x轴刻度会有问题（刻度不齐等），这是就要进行手动调整。</p>
+</blockquote>
+<p><strong>对x轴刻度进行调整</strong></p>
+<pre><code class="language-python">plt.figure(figsize=(20, 8), dpi=60)
+
+plt.hist(movie[&quot;Rating&quot;].values, bins=20)
+
+# 求出最大最小值
+max_ = movie[&quot;Rating&quot;].max()
+min_ = movie[&quot;Rating&quot;].min()
+
+# 注意要生成 21 个刻度值
+t1 = np.linspace(min_, max_, num=21)
+
+# 修改刻度
+plt.xticks(t1)
+
+plt.grid()
+
+plt.show()
+</code></pre>
+<figure data-type="image" tabindex="3"><img src="https://i.loli.net/2021/04/20/1lvjEhS7RPuFQoC.png" alt="image-20210420112245977" loading="lazy"></figure>
+<h4 id="33-问题3">3.3 问题3</h4>
+<p><strong>对于这一组电影数据，如果我们希望统计电影分类(genre)的情况，应该如何处理数据？</strong></p>
+<p>思路分析</p>
 <ul>
-<li>pd.concat([&quot;数据1&quot;, &quot;数据2&quot;], axis=)</li>
-<li>pd.merge(left, right, how=, on=)
+<li>思路
 <ul>
-<li>how -- 以何种方式连接</li>
-<li>on -- 连接的键的依据是哪些</li>
+<li>1、创建一个全为0的<code>dataframe</code>，列索引置为电影的分类，<code>temp_df</code></li>
+<li>2、遍历每一部电影，<code>temp_df</code>中把分类出现的列的值置为<code>1</code></li>
+<li>3、求和</li>
 </ul>
 </li>
 </ul>
+<ol>
+<li>
+<p><strong>方法一</strong></p>
+<ul>
+<li>
+<p>获取分类类别</p>
+<pre><code class="language-python"># 将&quot;Genre&quot;列的分类放在列表中
+genre_list = [j for i in movie[&quot;Genre&quot;] for j in i.split(&quot;,&quot;)]
+# 去除重复的分类
+genre_list = np.unique(genre_list)
+genre_list
+
+array(['Action', 'Adventure', 'Animation', 'Biography', 'Comedy', 'Crime',
+       'Drama', 'Family', 'Fantasy', 'History', 'Horror', 'Music',
+       'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Sport', 'Thriller',
+       'War', 'Western'], dtype='&lt;U9')
+</code></pre>
+</li>
+<li>
+<p>创建一个全为0的dataframe，列索引置为电影的分类</p>
+<pre><code class="language-python"># 行数为电影行数，列数为类别数量
+genre_df = np.zeros([movie.shape[0], genre_list.shape[0]])
+
+genre_df = pd.DataFrame(genre_df, columns=genre_list, index=movie.index)
+</code></pre>
+<figure data-type="image" tabindex="4"><img src="https://i.loli.net/2021/04/20/bHRQj3tkrEOJ46D.png" alt="image-20210420112949872" loading="lazy"></figure>
+</li>
+<li>
+<p>遍历每一部电影，把分类出现的列的值置为1</p>
+<pre><code class="language-python">genre_tmp = [i.split(&quot;,&quot;) for i in movie[&quot;Genre&quot;]]
+for i in range(movie.shape[0]):
+    genre_df.loc[i, genre_tmp[i]] = 1
+
+# 排序
+genre_statistics = genre_df.sum().sort_values(ascending=False)
+</code></pre>
+</li>
+<li>
+<p>画出图像</p>
+<pre><code class="language-python">plt.figure(figsize=(20, 8), dpi=60)
+genre_statistics.plot.bar()
+</code></pre>
+<figure data-type="image" tabindex="5"><img src="https://i.loli.net/2021/04/20/46hFaPdYrpxtziD.png" alt="image-20210420113159851" loading="lazy"></figure>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>方法二</strong></p>
+<ul>
+<li>
+<p>获取分类类别并用set方法去重</p>
+<pre><code class="language-python">genre_list_all = [j for i in movie[&quot;Genre&quot;] for j in i.split(&quot;,&quot;)]
+genre_list = set(genre_list_all)
+</code></pre>
+</li>
+<li>
+<p>创建一个全为0的dataframe，列索引为<strong>每种类别出现的次数</strong></p>
+<pre><code class="language-python">genre_df = pd.DataFrame(np.zeros(len(genre_list)), index=genre_list, dtype=np.int32)
+</code></pre>
+<img src="https://i.loli.net/2021/04/20/6WBcSax2XovPbE8.png" alt="image-20210420113710800" style="zoom:50%;" />
+</li>
+<li>
+<p>循环遍历未去重前的分类列表<code>genre_list_all</code>，将出现的分类数量加1</p>
+<pre><code class="language-py">for i in genre_list_all:
+    genre_df.loc[i, 0] += 1
+</code></pre>
+</li>
+<li>
+<p>按降序排序后将列名命名为数量</p>
+<pre><code class="language-python">genre_df = genre_df.sort_values(by=0, ascending=False)
+genre_df.rename(columns={0: &quot;数量&quot;}, inplace=True)
+</code></pre>
+</li>
+<li>
+<p>画图</p>
+<pre><code class="language-python">genre_df.plot.bar(figsize=(20, 8))
+</code></pre>
+<figure data-type="image" tabindex="6"><img src="https://i.loli.net/2021/04/20/PWnZVBIHMvm3OD5.png" alt="image-20210420114203364" loading="lazy"></figure>
+</li>
+</ul>
+</li>
+</ol>
 
             </div>
             
@@ -713,7 +767,7 @@ result = pd.merge(left, right, how=&quot;outer&quot;, on=[&quot;key1&quot;, &quo
     </li>
     <li class="post-copyright-link">
       <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="https://fade-color.github.io/post/pandas-06-shu-ju-he-bing/" title="Pandas-06-数据合并">https://fade-color.github.io/post/pandas-06-shu-ju-he-bing/</a>
+      <a href="https://fade-color.github.io/post/pandas-09-zong-he-an-li/" title="Pandas-09-综合案例">https://fade-color.github.io/post/pandas-09-zong-he-an-li/</a>
     </li>
     <li class="post-copyright-license">
       <strong class="language" data-lan="copyright">版权声明： </strong>
@@ -731,14 +785,14 @@ result = pd.merge(left, right, how=&quot;outer&quot;, on=[&quot;key1&quot;, &quo
     <div class="nav-prev">
       
         <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="Pandas-07-交叉表 透视表" href="https://fade-color.github.io/post/pandas-07-jiao-cha-biao-tou-shi-biao/">Pandas-07-交叉表 透视表</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="Pandas-07-交叉表 透视表" href="https://fade-color.github.io/post/pandas-07-jiao-cha-biao-tou-shi-biao/">上一篇</a>
+        <a class="nav-pc-next" title="机器学习笔记01. K-近邻算法简介" href="https://fade-color.github.io/post/ji-qi-xue-xi-bi-ji-01-k-jin-lin-suan-fa-jian-jie/">机器学习笔记01. K-近邻算法简介</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="机器学习笔记01. K-近邻算法简介" href="https://fade-color.github.io/post/ji-qi-xue-xi-bi-ji-01-k-jin-lin-suan-fa-jian-jie/">上一篇</a>
       
     </div>
     <div class="nav-next">
       
-        <a class="nav-pc-next" title="Pandas-05-数据离散化" href="https://fade-color.github.io/post/pandas-05-shu-ju-chi-san-hua/">Pandas-05-数据离散化</a>
-        <a class="nav-mobile-next" title="Pandas-05-数据离散化" href="https://fade-color.github.io/post/pandas-05-shu-ju-chi-san-hua/">下一篇</a>
+        <a class="nav-pc-next" title="Pandas-08-分组与聚合" href="https://fade-color.github.io/post/pandas-08-fen-zu-yu-ju-he/">Pandas-08-分组与聚合</a>
+        <a class="nav-mobile-next" title="Pandas-08-分组与聚合" href="https://fade-color.github.io/post/pandas-08-fen-zu-yu-ju-he/">下一篇</a>
         <i class="fa fa-chevron-right"></i>
       
     </div>
