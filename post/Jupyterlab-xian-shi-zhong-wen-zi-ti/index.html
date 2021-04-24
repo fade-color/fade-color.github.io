@@ -9,7 +9,7 @@
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#000">
 <title>JupyterLab 显示中文字体 | 七年的万事屋</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1619173176513">
+<link rel="shortcut icon" href="/favicon.ico?v=1619226411559">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -215,7 +215,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">19</span>
+        <span class="site-item-stat-count">20</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -4481,6 +4481,464 @@ This is func5... arg:hello
 ----------------------------
 &lt;/code&gt;&lt;/pre&gt;
 ">Python装饰器总结</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://fade-color.github.io/post/python-zheng-ze-biao-da-shi/"" data-c="
+          &lt;h3 id=&#34;1-match方法&#34;&gt;1. match方法&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;re.match&lt;/code&gt;尝试从字符串&lt;strong&gt;起始位置&lt;/strong&gt;匹配一个模式，如果不是起始位置匹配成功的话，&lt;code&gt;match&lt;/code&gt;就返回&lt;code&gt;None&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;。语法格式如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;re.match(pattern, string, flags=0)&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;pattern&lt;/code&gt;：匹配的正则表达式&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;string&lt;/code&gt;：要匹配的字符串&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;flags&lt;/code&gt;：标志位，用于控制正则表达式的匹配方式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;标志位：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;修饰符&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;描述&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;re.I&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;忽略大小写&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;re.L&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;做本地化（locale-aware）匹配&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;re.M&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;多行匹配，影响 &lt;code&gt;^&lt;/code&gt; 和 &lt;code&gt;$&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;re.S&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;使 &lt;code&gt;.&lt;/code&gt; 匹配包括换行符在内的所有字符&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;re.U&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;根据Unicode字符集解析字符。这个标志影响 &lt;code&gt;\w&lt;/code&gt;，&lt;code&gt;\W&lt;/code&gt;，&lt;code&gt;\b&lt;/code&gt;，&lt;code&gt;\B&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;re.X&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;该标志通过给予你更灵活的方式以便你将表达式写的更易于理解&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;match&lt;/code&gt;方法的使用&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import re
+
+s = &amp;quot;hello world&amp;quot;
+pattern = &amp;quot;hello&amp;quot;
+rs = re.match(pattern, s)
+
+print(rs)
+# &amp;lt;re.Match object; span=(0, 5), match=&#39;hello&#39;&amp;gt;
+
+print(dir(rs))  # 查看rs的方法
+# [&#39;__class__&#39;, &#39;__copy__&#39;, ..., &#39;pos&#39;, &#39;re&#39;, &#39;regs&#39;, &#39;span&#39;, &#39;start&#39;, &#39;string&#39;]
+
+print(rs.group())  # 返回s中匹配到的字符串
+# hello
+
+print(rs.span())  # 返回s中匹配到的范围
+# (0, 5)
+print(rs.start())  # 返回s中匹配到的字符串起始位置
+# 0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;2-常用匹配符&#34;&gt;2. 常用匹配符&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;符号&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;描述&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;.&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;匹配除换行符&lt;code&gt;\n&lt;/code&gt;以外任意一个字符&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;[]&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;匹配列表中的字符&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;\w&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;匹配字母、数字、下划线，即 a-z，A-Z，0-9，_&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;\W&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;匹配不是字母、数字、下划线的字符&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;\s&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;匹配空白字符，即空格（&lt;code&gt;\n&lt;/code&gt;，&lt;code&gt;\t&lt;/code&gt;）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;\S&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;匹配不是空白的字符&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;\d&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;匹配数字，即 0-9&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;\D&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;匹配非数字的字符&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;s_list = [&amp;quot;1&amp;quot;, &amp;quot;6&amp;quot;, &amp;quot;D&amp;quot;, &amp;quot;\t&amp;quot;, &amp;quot;a&amp;quot;, &amp;quot;\n&amp;quot;, &amp;quot;_&amp;quot;, &amp;quot;.&amp;quot;]
+
+# --------------- &amp;quot;.&amp;quot;的使用 --------------- #
+print([re.match(&amp;quot;.&amp;quot;, s) is not None for s in s_list])  # 除\n以外任意字符
+# [True, True, True, True, True, False, True, True, True, True, True]
+
+# --------------- &amp;quot;[]&amp;quot;的使用 --------------- #
+print([re.match(&amp;quot;[0-9a-z]&amp;quot;, s) is not None for s in s_list])  # 数字和小写字母
+# [True, True, False, False, True, False, False, False, False, False, False]
+
+# --------------- &amp;quot;\w&amp;quot;的使用 --------------- #
+print([re.match(&amp;quot;\w&amp;quot;, s) is not None for s in s_list])  # a-z A-Z 0-9 _
+# [True, True, True, False, True, False, True, False, False, False, False]
+
+# --------------- &amp;quot;\W&amp;quot;的使用 --------------- #
+print([re.match(&amp;quot;\W&amp;quot;, s) is not None for s in s_list])  # 除a-z A-Z 0-9 _以外的字符
+# [False, False, False, True, False, True, False, True, True, True, True]
+
+# --------------- &amp;quot;\s&amp;quot;的使用 --------------- #
+print([re.match(&amp;quot;\s&amp;quot;, s) is not None for s in s_list])  # 空白字符\t \n等
+# [False, False, False, True, False, True, False, False, False, False, False]
+
+# --------------- &amp;quot;\d&amp;quot;的使用 --------------- #
+print([re.match(&amp;quot;\d&amp;quot;, s) is not None for s in s_list])  # 数字
+# [True, True, False, False, False, False, False, False, False, False, False]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;3-限定符&#34;&gt;3. 限定符&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;符号&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;描述&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;符号&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;描述&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;*&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;匹配0次或多次&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;{m}&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;重复m次&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;+&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;匹配一次或多次&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;{m,n}&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;重复m到n次&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;?&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;匹配一次或0次&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;{m,}&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;至少m次&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;s_list = [&amp;quot;123qwe&amp;quot;, &amp;quot;qwerty&amp;quot;, &amp;quot;1qwe&amp;quot;, &amp;quot;12345&amp;quot;]
+
+# --------------- &amp;quot;*&amp;quot;的使用 --------------- #
+print([re.match(&amp;quot;\d*&amp;quot;, s) is not None for s in s_list])  # 匹配0个或多个数字
+# [True, True, True, True]
+
+# --------------- &amp;quot;+&amp;quot;的使用 --------------- #
+print([re.match(&amp;quot;\d+&amp;quot;, s) is not None for s in s_list])  # 匹配一个或0个数字
+# [True, False, True, True]
+
+# --------------- &amp;quot;?&amp;quot;的使用 --------------- #
+print([re.match(&amp;quot;\d?&amp;quot;, s) is not None for s in s_list])  # 匹配一个或0个数字
+# [True, True, True, True]
+
+# --------------- &amp;quot;{m}&amp;quot;的使用 --------------- #
+print([re.match(&amp;quot;\d{3}&amp;quot;, s) is not None for s in s_list])  # 匹配3个数字
+# [True, False, False, True]
+
+# --------------- &amp;quot;{m,n}&amp;quot;的使用 --------------- #
+print([re.match(&amp;quot;\d{2,5}&amp;quot;, s) is not None for s in s_list])  # 匹配2到3个数字
+# [True, False, False, True]
+
+# --------------- &amp;quot;{m,}&amp;quot;的使用 --------------- #
+print([re.match(&amp;quot;\d{3,}&amp;quot;, s) is not None for s in s_list])  # 至少3个数字
+# [True, False, False, True]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;4-边界字符&#34;&gt;4. 边界字符&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;字符&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;功能&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;^&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;匹配开头&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;$&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;匹配结尾&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;\b&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;匹配单词边界&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;\B&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;匹配非单词边界&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;[^]&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;匹配除列表中指定字符以外的所有字符&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# --------------- &amp;quot;$&amp;quot;用法，匹配QQ邮箱 --------------- #
+# 5-10位数字，@qq.com结尾
+pattern = r&amp;quot;[1-9]\d{4,9}@qq.com$&amp;quot;
+match_list = [&amp;quot;318821221@qq.com&amp;quot;, &amp;quot;a31234@qq.com&amp;quot;, &amp;quot;123.231@qq.com&amp;quot;, &amp;quot;3123213@163.com&amp;quot;, &amp;quot;3127721@qq.com.cn&amp;quot;]
+print([bool(re.match(pattern, s)) for s in match_list])
+# [True, False, False, False, False]
+
+# --------------- &amp;quot;^&amp;quot;匹配开头 --------------- #
+pattern = r&amp;quot;^hello.*&amp;quot;
+match_list = [&amp;quot;hello python&amp;quot;, &amp;quot;hi python&amp;quot;]
+print([bool(re.match(pattern, s)) for s in match_list])
+# [True, False]
+
+# --------------- &amp;quot;\b&amp;quot;匹配单词左边界 --------------- #
+pattern = r&amp;quot;.*\bab&amp;quot;
+match_list = [&amp;quot;12345 abc&amp;quot;, &amp;quot;baby&amp;quot;, &amp;quot;absolute&amp;quot;, &amp;quot;stab&amp;quot;]
+print([bool(re.match(pattern, s)) for s in match_list])
+# [True, False, True, False]
+
+# --------------- &amp;quot;\b&amp;quot;匹配单词右边界 --------------- #
+pattern = r&amp;quot;.*ab\b&amp;quot;
+match_list = [&amp;quot;12345 abc&amp;quot;, &amp;quot;baby&amp;quot;, &amp;quot;absolute&amp;quot;, &amp;quot;stab&amp;quot;]
+print([bool(re.match(pattern, s)) for s in match_list])
+# [False, False, False, True]
+
+# --------------- &amp;quot;\B&amp;quot;匹配非单词边界 --------------- #
+pattern = r&amp;quot;.*\Bab&amp;quot;  # 非ab开头
+match_list = [&amp;quot;12345 abc&amp;quot;, &amp;quot;baby&amp;quot;, &amp;quot;absolute&amp;quot;, &amp;quot;stab&amp;quot;]
+print([bool(re.match(pattern, s)) for s in match_list])
+# [False, True, False, True]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;5-search方法&#34;&gt;5. search方法&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;search&lt;/code&gt;与&lt;code&gt;mactch&lt;/code&gt;的区别：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;re.match()&lt;/code&gt;只匹配字符串的开始，如果字符串开始不符合正则表达式，则匹配失败，函数返回&lt;code&gt;None&lt;/code&gt;；&lt;/li&gt;
+&lt;li&gt;而&lt;code&gt;re.search()&lt;/code&gt;匹配整个字符串，直到找到一个匹配。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;pattern = r&amp;quot;Love&amp;quot;
+s = &amp;quot;I Love You&amp;quot;
+
+print(re.match(pattern, s))
+# None
+print(re.search(pattern, s))
+# &amp;lt;re.Match object; span=(2, 6), match=&#39;Love&#39;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;6-匹配多个字符串&#34;&gt;6. 匹配多个字符串&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;search()&lt;/code&gt;方法搜索一个字符串，想要搜索多个字符串，使用择一匹配符号 &lt;code&gt;|&lt;/code&gt; 。择一匹配符号和逻辑或类似，只要满足任何一个，就算匹配成功。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;pattern = r&amp;quot;aa|bb|cc&amp;quot;
+s = &amp;quot;my name is cc&amp;quot;
+
+print(re.search(pattern, s))
+# &amp;lt;re.Match object; span=(11, 13), match=&#39;cc&#39;&amp;gt;
+
+# --------------- 匹配0-100之间的所有数字 --------------- #
+pattern = r&amp;quot;[1-9]?\d$|100$&amp;quot;
+s_list = [&amp;quot;1&amp;quot;, &amp;quot;0&amp;quot;, &amp;quot;63&amp;quot;, &amp;quot;121&amp;quot;, &amp;quot;100&amp;quot;, &amp;quot;9218&amp;quot;, &amp;quot;010&amp;quot;]
+print([bool(re.match(pattern, s)) for s in s_list])
+# [True, True, True, False, True, False, False]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;对于单个字符使用或关系时，使用字符集 &lt;code&gt;[]&lt;/code&gt; 和择一匹配符 &lt;code&gt;|&lt;/code&gt; 的效果是相同的。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;pattern = r&amp;quot;[ab][cd]&amp;quot;
+s_list = [&amp;quot;ab&amp;quot;, &amp;quot;ac&amp;quot;, &amp;quot;bd&amp;quot;, &amp;quot;cd&amp;quot;, &amp;quot;ad&amp;quot;]
+print([bool(re.match(pattern, s)) for s in s_list])
+# [False, True, True, False, True]
+
+# 等同于
+pattern = r&amp;quot;ac|ad|bc|bd&amp;quot;
+print([bool(re.match(pattern, s)) for s in s_list])
+# [False, True, True, False, True]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;7-分组&#34;&gt;7. 分组&lt;/h3&gt;
+&lt;p&gt;我们可以用小括号&lt;code&gt;()&lt;/code&gt;来进行分组，括起来的部分会成为一组，通过&lt;code&gt;group()&lt;/code&gt;方法的参数获取指定的组匹配的字符串。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;字符&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;功能&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;(ab)&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;对括号内的字符进行分组&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;\num&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;引用分组&lt;code&gt;num&lt;/code&gt;匹配到的字符串&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;(?P&amp;lt;name&amp;gt;)&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;分别起组名&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;(?P=name)&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;引用别名为&lt;code&gt;name&lt;/code&gt;分组匹配到的字符串&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;8-sub和subn搜索与替换&#34;&gt;8. sub和subn搜索与替换&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;sub&lt;/code&gt;和&lt;code&gt;subn&lt;/code&gt;用于实现搜索和替换功能。这两个函数的功能几乎完全相同，都是将字符串所匹配正则表达式的部分替换成其他字符串。用于替换的部分可以使一个字符串，也可以是一个返回字符串的函数。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;sub&lt;/code&gt;函数返回替换后的结果；&lt;code&gt;subn&lt;/code&gt;函数返回一个由&lt;strong&gt;替换后的字符串&lt;/strong&gt;和&lt;strong&gt;替换的总数&lt;/strong&gt;组成的元组。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;re.sub(pattern, repl, string, count=0, flags=0)&lt;/code&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;pattern&lt;/code&gt;：匹配的正则表达式&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;repl&lt;/code&gt;：替换的字符串，也可以是一个返回字符串的函数&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;string&lt;/code&gt;：被替换的原始字符串&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;count&lt;/code&gt;：模式匹配后替换的最大次数，默认0表示替换所有的匹配&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;flags&lt;/code&gt;：标志位，用于控制正则表达式的匹配方式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;phone = &amp;quot;2004-959-559  # 这是一个国外电话号码&amp;quot;
+# --------------- 删除字符串中的注释 --------------- #
+num = re.sub(r&amp;quot;#.*$&amp;quot;, &amp;quot;&amp;quot;, phone)
+# 2004-959-559 
+
+# --------------- 删除除电话号码以外的所有字符 --------------- #
+num = re.sub(r&amp;quot;\D&amp;quot;, &amp;quot;&amp;quot;, phone)
+# 2004959559
+
+# --------------- subn删除除电话号码以外的所有字符 --------------- #
+result = re.subn(r&amp;quot;\D&amp;quot;, &amp;quot;&amp;quot;, phone)
+# (&#39;2004959559&#39;, 16)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;9-compile方法&#34;&gt;9. compile方法&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;compile()&lt;/code&gt;方法用于编译正则表达式，生成一个正则表达式(Pattern)对象，供&lt;code&gt;match()&lt;/code&gt;和&lt;code&gt;search()&lt;/code&gt;这两个函数使用。语法格式为：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;re.compile(pattern[, flags])&lt;/code&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;pattern&lt;/code&gt;：一个字符串形式的正则表达式&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;flags&lt;/code&gt;：可选，标志位，用于控制正则表达式的匹配方式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# --------------- compile的使用 --------------- #
+s = &amp;quot;first123 line&amp;quot;
+regex = re.compile(r&amp;quot;\w+&amp;quot;)
+print(regex.match(s))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;10-findall方法和finditer方法&#34;&gt;10. findall方法和finditer方法&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;findall()&lt;/code&gt;方法在字符串中找到正则表达式所匹配的所有字符串，并返回一个列表，如果没找到匹配子串则返回空列表。语法格式如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;findall(pattern, string, flags=0)&lt;/code&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;pattern&lt;/code&gt;：匹配的正则表达式&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;string&lt;/code&gt;：要匹配的字符串&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# --------------- findall的使用 --------------- #
+s = &amp;quot;first 1 second 2 third 3&amp;quot;
+rs = re.findall(r&amp;quot;\w+&amp;quot;, s)
+print(rs)
+# [&#39;first&#39;, &#39;1&#39;, &#39;second&#39;, &#39;2&#39;, &#39;third&#39;, &#39;3&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;finditer()&lt;/code&gt;方法与&lt;code&gt;findall&lt;/code&gt;类似，只不过&lt;code&gt;finditer()&lt;/code&gt;返回的是一个迭代器对象，获取匹配到的字符串时需要遍历并调用&lt;code&gt;item.group()&lt;/code&gt;方法。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# --------------- finditer的使用 --------------- #
+s = &amp;quot;first 1 second 2 third 3&amp;quot;
+iterator = re.finditer(r&amp;quot;\w+&amp;quot;, s)
+print(iterator)
+# &amp;lt;callable_iterator object at 0x7fd7129696d0&amp;gt;
+for item in iterator:
+    print(item.group(), end=&amp;quot;\t&amp;quot;)
+# first	1	second	2	third	3	
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;11-split方法&#34;&gt;11. split方法&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;split()&lt;/code&gt;方法用于根据正则表达式分割字符串，它返回一个分割后的子串列表。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;re.split(pattern, string[, maxsplit=0, flags=0])&lt;/code&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;pattern&lt;/code&gt;：要匹配的表达式&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;string&lt;/code&gt;：要匹配的字符串&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;maxsplit&lt;/code&gt;：最大分割次数，默认为0，即不限制&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# --------------- split的使用 --------------- #
+s = &amp;quot;first 1 second 2 third 3&amp;quot;
+# 按数字分割
+print(re.split(r&amp;quot;\d+&amp;quot;, s))
+# [&#39;first &#39;, &#39; second &#39;, &#39; third &#39;, &#39;&#39;]
+
+# 指定maxsplit=1
+print(re.split(r&amp;quot;\d+&amp;quot;, s, maxsplit=1))
+# [&#39;first &#39;, &#39; second 2 third 3&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;12-贪婪模式与非贪婪模式&#34;&gt;12. 贪婪模式与非贪婪模式&lt;/h3&gt;
+&lt;p&gt;在Python中正则匹配默认是贪婪的，总是尝试匹配尽可能多的字符。非贪婪模式则是尽可能少的匹配字符可以使用&lt;code&gt;*&lt;/code&gt;，&lt;code&gt;?&lt;/code&gt;，&lt;code&gt;+&lt;/code&gt;，&lt;code&gt;{m,n}&lt;/code&gt;后面加 &lt;code&gt;?&lt;/code&gt; 使得贪婪匹配变为非贪婪匹配。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;例1：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# --------------- 贪婪模式 --------------- #
+rs = re.match(r&amp;quot;(.+)(\d+-\d+-\d+)&amp;quot;, &amp;quot;This is my tel: 133-1234-1234&amp;quot;)
+print(rs.group(1))
+# This is my tel: 13
+print(rs.group(2))
+# 3-1234-1234
+
+# --------------- 非贪婪模式 --------------- #
+rs = re.match(r&amp;quot;(.+?)(\d+-\d+-\d+)&amp;quot;, &amp;quot;This is my tel: 133-1234-1234&amp;quot;)
+print(rs.group(1))
+# This is my tel: 
+print(rs.group(2))
+# 133-1234-1234
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;例2：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# --------------- 贪婪模式 --------------- #
+rs = re.match(r&amp;quot;abc(\d+)&amp;quot;, &amp;quot;abc123&amp;quot;)
+print(rs.group(1))  # 123
+
+# --------------- 非贪婪模式 --------------- #
+rs = re.match(r&amp;quot;abc(\d+?)&amp;quot;, &amp;quot;abc123&amp;quot;)
+print(rs.group(1))  # 1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+">Python - 正则表达式</a>
       </div>
       
       <div class="item">
